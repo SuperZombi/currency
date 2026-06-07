@@ -2,6 +2,9 @@ const App = () => {
 	const [currencies, setCurrencies] = React.useState([])
 	const [showAddPopup, setShowAddPopup] = React.useState(false)
 	const [selectedCurrencys, setSelectedCurrencys] = React.useState([])
+	const [dragState, setDragState] = React.useState(null)
+	const cardRefs = React.useRef([])
+	const dragRef = React.useRef(null)
 
 	React.useEffect(() => {
 		const savedCurrencies = localStorage.getItem('currencies')
@@ -29,31 +32,84 @@ const App = () => {
 		}
 	}
 
-	const [draggedIndex, setDraggedIndex] = React.useState(null)
-	const [dragOverIndex, setDragOverIndex] = React.useState(null)
-	const handleDragStart = (e, index) => {
-		setDraggedIndex(index)
-		const ghost = document.createElement('div')
-		ghost.style.cssText = `
-			position: fixed; top: -1000px;
-			background: white; border: 2px solid #3b82f6;
-			border-radius: 12px; padding: 12px 16px;
-			font-family: monospace; font-weight: bold;
-			box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-			opacity: 0.95; font-size: 1rem;
-		`
-		ghost.textContent = `${selectedCurrencys[index].iso_code} ${selectedCurrencys[index].symbol}`
-		document.body.appendChild(ghost)
-		e.dataTransfer.setDragImage(ghost, 0, 0)
-		requestAnimationFrame(() => document.body.removeChild(ghost))
+	const moveCurrency = (fromIndex, toIndex) => {
+		if (fromIndex === toIndex || fromIndex === null || toIndex === null) return
+
+		setSelectedCurrencys(prev => {
+			const updated = [...prev]
+			const [draggedItem] = updated.splice(fromIndex, 1)
+			updated.splice(toIndex, 0, draggedItem)
+			return updated
+		})
 	}
-	const handleDrop = (targetIndex) => {
-		if (draggedIndex === null || draggedIndex === targetIndex) return;
-		const updated = [...selectedCurrencys]
-		const [draggedItem] = updated.splice(draggedIndex, 1)
-		updated.splice(targetIndex, 0, draggedItem)
-		setSelectedCurrencys(updated)
-		setDraggedIndex(null)
+
+	const getPointerTargetIndex = (clientY) => {
+		const cards = cardRefs.current.filter(Boolean)
+		if (!cards.length) return null
+
+		for (let index = 0; index < cards.length; index++) {
+			const rect = cards[index].getBoundingClientRect()
+			if (clientY < rect.top + rect.height / 2) {
+				return index
+			}
+		}
+
+		return cards.length - 1
+	}
+
+	const clearDrag = () => {
+		dragRef.current = null
+		setDragState(null)
+		document.body.style.userSelect = ''
+		document.body.style.webkitUserSelect = ''
+	}
+
+	const handleDragHandlePointerDown = (event, index) => {
+		if (event.button !== undefined && event.button !== 0) return
+
+		event.preventDefault()
+		event.currentTarget.setPointerCapture?.(event.pointerId)
+		document.body.style.userSelect = 'none'
+		document.body.style.webkitUserSelect = 'none'
+
+		const nextDragState = {
+			fromIndex: index,
+			toIndex: index,
+			pointerId: event.pointerId,
+		}
+		dragRef.current = nextDragState
+		setDragState(nextDragState)
+	}
+
+	const handleDragHandlePointerMove = (event) => {
+		const currentDrag = dragRef.current
+		if (!currentDrag || currentDrag.pointerId !== event.pointerId) return
+
+		event.preventDefault()
+		const toIndex = getPointerTargetIndex(event.clientY)
+		if (toIndex === null || toIndex === currentDrag.toIndex) return
+
+		const nextDragState = {...currentDrag, toIndex}
+		dragRef.current = nextDragState
+		setDragState(nextDragState)
+	}
+
+	const handleDragHandlePointerUp = (event) => {
+		const currentDrag = dragRef.current
+		if (!currentDrag || currentDrag.pointerId !== event.pointerId) return
+
+		event.preventDefault()
+		event.currentTarget.releasePointerCapture?.(event.pointerId)
+		moveCurrency(currentDrag.fromIndex, currentDrag.toIndex)
+		clearDrag()
+	}
+
+	const handleDragHandlePointerCancel = (event) => {
+		const currentDrag = dragRef.current
+		if (!currentDrag || currentDrag.pointerId !== event.pointerId) return
+
+		event.currentTarget.releasePointerCapture?.(event.pointerId)
+		clearDrag()
 	}
 
 	return (
@@ -70,34 +126,18 @@ const App = () => {
 				</div>
 
 				{selectedCurrencys.map((currency, index) => (
-					<div key={`${currency.iso_code}-${index}`} draggable
-						onDragStart={(e) => handleDragStart(e, index)}
-						onDragEnd={() => setDraggedIndex(null)}
-						onDragOver={(e) => {e.preventDefault(); setDragOverIndex(index)}}
-						onDrop={() => {handleDrop(index); setDragOverIndex(null)}}
-						className={`animate-[fadeIn_0.2s_ease_forwards]
-							border p-3 rounded-xl flex items-center gap-3 cursor-move
-							${draggedIndex === index ? 'opacity-50 scale-95' : ''}
-							${dragOverIndex === index && draggedIndex !== index ? 'border-blue-500' : ''}
-						`}
-					>
-						<i className="fa-solid fa-bars"></i>
-						<div className="flex flex-col select-none whitespace-nowrap">
-							<span className="font-mono font-bold">{currency.iso_code}</span>
-							<span className="text-sm text-gray-500">{currency.name}</span>
-						</div>
-						<div className="ml-auto flex items-center gap-3">
-							<div className="flex items-center gap-1">
-								<input className="text-right outline-none w-full"
-									type="number" inputMode="decimal" min="0" placeholder="0"
-								/>
-								<span className="font-semibold font-mono text-xl">{currency.symbol}</span>
-							</div>
-							<i className="fa-regular fa-circle-xmark cursor-pointer"
-								onClick={() => setSelectedCurrencys(prev => prev.filter(c => c.iso_code !== currency.iso_code))}
-							></i>
-						</div>
-					</div>
+					<CurrencyCard
+						key={`${currency.iso_code}-${index}`}
+						currency={currency}
+						index={index}
+						refCallback={element => cardRefs.current[index] = element}
+						dragState={dragState}
+						onHandlePointerDown={handleDragHandlePointerDown}
+						onHandlePointerMove={handleDragHandlePointerMove}
+						onHandlePointerUp={handleDragHandlePointerUp}
+						onHandlePointerCancel={handleDragHandlePointerCancel}
+						onRemove={() => setSelectedCurrencys(prev => prev.filter(c => c.iso_code !== currency.iso_code))}
+					/>
 				))}
 			</div>
 
@@ -114,6 +154,57 @@ const App = () => {
 	)
 }
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>)
+
+const CurrencyCard = ({
+	currency,
+	index,
+	refCallback,
+	dragState,
+	onHandlePointerDown,
+	onHandlePointerMove,
+	onHandlePointerUp,
+	onHandlePointerCancel,
+	onRemove,
+}) => {
+	const isDragged = dragState?.fromIndex === index
+	const isDropTarget = dragState?.toIndex === index && dragState?.fromIndex !== index
+
+	return (
+		<div ref={refCallback}
+			className={`animate-[fadeIn_0.2s_ease_forwards]
+				border p-3 rounded-xl flex items-center gap-3 transition
+				${isDragged ? 'opacity-50 scale-95' : ''}
+				${isDropTarget ? 'border-blue-500 bg-blue-50' : ''}
+			`}
+		>
+			<button type="button"
+				aria-label={`Drag ${currency.iso_code}`}
+				className="shrink-0 cursor-grab active:cursor-grabbing touch-none p-2 -m-2 text-gray-500 hover:text-gray-900"
+				onPointerDown={(event) => onHandlePointerDown(event, index)}
+				onPointerMove={onHandlePointerMove}
+				onPointerUp={onHandlePointerUp}
+				onPointerCancel={onHandlePointerCancel}
+			>
+				<i className="fa-solid fa-bars pointer-events-none"></i>
+			</button>
+			<div className="flex flex-col select-none whitespace-nowrap">
+				<span className="font-mono font-bold">{currency.iso_code}</span>
+				<span className="text-sm text-gray-500">{currency.name}</span>
+			</div>
+			<div className="ml-auto flex items-center gap-3">
+				<div className="flex items-center gap-1">
+					<input className="text-right outline-none w-full"
+						type="number" inputMode="decimal" min="0" placeholder="0"
+					/>
+					<span className="font-semibold font-mono text-xl">{currency.symbol}</span>
+				</div>
+				<i className="fa-regular fa-circle-xmark cursor-pointer"
+					onClick={onRemove}
+				></i>
+			</div>
+		</div>
+	)
+}
 
 const AddCurrencyPopup = ({
 	currencies, selectedCurrencys, onClose, addCurrency
