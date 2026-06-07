@@ -198,7 +198,7 @@ const CurrencyCard = ({
 					<input className="text-right outline-none w-full"
 						type="number" inputMode="decimal" min="0" placeholder="0"
 					/>
-					<span className="font-semibold font-mono text-xl">{currency.symbol}</span>
+					<span className="font-medium font-mono text-xl">{currency.symbol}</span>
 				</div>
 				<i className="fa-regular fa-circle-xmark cursor-pointer"
 					onClick={onRemove}
