@@ -13,7 +13,7 @@ const App = () => {
 	
 	function loadRates() {
 		setLoadingApiData(true)
-		fetch('https://api.frankfurter.dev/v2/rates').then(res => res.json()).then(data => {
+		fetch('https://api.frankfurter.dev/v2/rates', {cache: 'reload'}).then(res => res.json()).then(data => {
 			setRates(data)
 			localStorage.setItem('rates', JSON.stringify(data))
 			const now = Date.now()
@@ -190,7 +190,7 @@ const App = () => {
 			{ratesTime && (
 				<div className="pt-4 flex items-center justify-center gap-3">
 					<span className="text-sm text-gray-500 italic">
-						Updated at {new Date(ratesTime).toLocaleString()}
+						Updated at <span>{new Date(ratesTime).toLocaleString()}</span>
 					</span>
 					<button className={`cursor-pointer p-1.5 aspect-square border border-gray-500 rounded-lg text-xs
 						${loadingApiData ? '' : 'hover:bg-gray-100 transition dark:hover:bg-gray-700'}
