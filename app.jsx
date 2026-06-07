@@ -271,7 +271,7 @@ const CurrencyCard = ({
 			>
 				<i className="fa-solid fa-bars pointer-events-none"></i>
 			</button>
-			<div className="flex select-none whitespace-nowrap items-center gap-1 font-mono font-medium">
+			<div className="flex select-none whitespace-nowrap items-center gap-2 font-mono font-medium">
 				<span>{currency.symbol}</span>
 				<span>{currency.iso_code}</span>
 			</div>
