@@ -36,9 +36,14 @@ const App = () => {
 		if (fromIndex === toIndex || fromIndex === null || toIndex === null) return
 
 		setSelectedCurrencys(prev => {
+			if (fromIndex < 0 || fromIndex >= prev.length || toIndex < 0 || toIndex > prev.length) return prev
+
+			const insertIndex = toIndex > fromIndex ? toIndex - 1 : toIndex
+			if (insertIndex === fromIndex) return prev
+
 			const updated = [...prev]
 			const [draggedItem] = updated.splice(fromIndex, 1)
-			updated.splice(toIndex, 0, draggedItem)
+			updated.splice(insertIndex, 0, draggedItem)
 			return updated
 		})
 	}
@@ -54,7 +59,7 @@ const App = () => {
 			}
 		}
 
-		return cards.length - 1
+		return cards.length
 	}
 
 	const clearDrag = () => {
