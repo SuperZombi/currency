@@ -121,6 +121,7 @@ const App = () => {
 					border px-4 py-2
 					flex gap-2 items-center justify-center
 					cursor-pointer rounded-xl
+					hover:bg-gray-100 transition select-none
 				" onClick={() => setShowAddPopup(true)}
 				>
 					<i className="fa-solid fa-plus"></i>
@@ -181,7 +182,7 @@ const CurrencyCard = ({
 		>
 			<button type="button"
 				aria-label={`Drag ${currency.iso_code}`}
-				className="shrink-0 cursor-grab active:cursor-grabbing touch-none p-2 -m-2 text-gray-500 hover:text-gray-900"
+				className="shrink-0 cursor-grab active:cursor-grabbing touch-none p-2 -m-2 text-gray-500 hover:text-gray-900 transition"
 				onPointerDown={(event) => onHandlePointerDown(event, index)}
 				onPointerMove={onHandlePointerMove}
 				onPointerUp={onHandlePointerUp}
@@ -200,7 +201,7 @@ const CurrencyCard = ({
 					/>
 					<span className="font-medium font-mono text-xl">{currency.symbol}</span>
 				</div>
-				<i className="fa-regular fa-circle-xmark cursor-pointer"
+				<i className="fa-regular fa-circle-xmark cursor-pointer text-gray-500 hover:text-red-500 transition text-lg"
 					onClick={onRemove}
 				></i>
 			</div>
@@ -257,7 +258,7 @@ const Popup = ({children, onClose, title, width}) => {
 					<div className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer"
 						onClick={onClose}
 					>
-						<i className="fa-solid fa-circle-xmark text-red-500 text-xl"></i>
+						<i className="fa-solid fa-circle-xmark text-red-500 text-xl hover:text-red-700 transition"></i>
 					</div>
 				</h2>
 				{children}
