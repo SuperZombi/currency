@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build:js": "node build.js",
-    "build:css": "npx @tailwindcss/cli -i ./web_dev/src/tailwind.css -o ./web/dist/tailwind.css --minify",
-    "prepare-web": "node prepare-web.js",
-    "build": "npm run build:js && npm run build:css && npm run prepare-web"
+    "build:css": "npx @tailwindcss/cli -i tailwind.css -o ./dist/tailwind.css --minify",
+    "build": "npm run build:js && npm run build:css"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.11",
