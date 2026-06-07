@@ -283,7 +283,7 @@ const CurrencyCard = ({
 						onChange={handleChange}
 					/>
 				</div>
-				<i className="fa-regular fa-circle-xmark cursor-pointer text-gray-500 hover:text-red-500 transition text-lg"
+				<i className="fa-solid fa-circle-xmark cursor-pointer text-gray-500 hover:text-red-500 transition text-lg"
 					onClick={onRemove}
 				></i>
 			</div>
@@ -307,18 +307,20 @@ const AddCurrencyPopup = ({
 					value={query} onChange={e => setQuery(e.target.value)}
 				/>
 			</div>
-			<div className="max-h-96 overflow-y-auto scrollbar-thin dark:scheme-dark">
-				{filteredCurrencies.map((currency, index) => (
-					<div key={index} className="
-						grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3 cursor-pointer
-						hover:bg-gray-100 transition select-none
-						dark:hover:bg-gray-700
-					" onClick={() => {addCurrency(currency); onClose()}}>
-						<span className="justify-self-center font-mono font-semibold">{currency.iso_code}</span>
-						<span>{currency.name}</span>
-					</div>
-				))}
-			</div>
+			{filteredCurrencies.length > 0 && (
+				<div className="max-h-96 overflow-y-auto scrollbar-thin dark:scheme-dark">
+					{filteredCurrencies.map((currency, index) => (
+						<div key={index} className="
+							grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3 cursor-pointer
+							hover:bg-gray-100 transition select-none
+							dark:hover:bg-gray-700
+						" onClick={() => {addCurrency(currency); onClose()}}>
+							<span className="justify-self-center font-mono font-semibold">{currency.iso_code}</span>
+							<span>{currency.name}</span>
+						</div>
+					))}
+				</div>
+			)}
 		</Popup>
 	)
 }

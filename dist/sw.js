@@ -7,7 +7,9 @@ const FILES = [
 	"./main.js",
 	"./tailwind.css",
 	"./react.production.min.js",
-	"./react-dom.production.min.js"
+	"./react-dom.production.min.js",
+	"./fontawesome/css/all.css",
+	"./fontawesome/webfonts/fa-solid-900.woff2"
 ];
 
 self.addEventListener("install", event => {
