@@ -1,5 +1,7 @@
 const App = () => {
 	const [currencies, setCurrencies] = React.useState([])
+	const [rates, setRates] = React.useState([])
+	const [ratesGraph, setRatesGraph] = React.useState({})
 	const [showAddPopup, setShowAddPopup] = React.useState(false)
 	const [selectedCurrencys, setSelectedCurrencys] = React.useState([])
 	const [dragState, setDragState] = React.useState(null)
@@ -17,6 +19,16 @@ const App = () => {
 			})
 		}
 
+		const savedRates = localStorage.getItem('rates')
+		if (savedRates) {
+			setRates(JSON.parse(savedRates))
+		} else {
+			fetch('https://api.frankfurter.dev/v2/rates').then(res => res.json()).then(data => {
+				setRates(data)
+				localStorage.setItem('rates', JSON.stringify(data))
+			})
+		}
+
 		const savedSelectedCurrencys = localStorage.getItem('selectedCurrencys')
 		if (savedSelectedCurrencys) {
 			setSelectedCurrencys(JSON.parse(savedSelectedCurrencys))
@@ -25,6 +37,16 @@ const App = () => {
 	React.useEffect(() => {
 		localStorage.setItem('selectedCurrencys', JSON.stringify(selectedCurrencys))
 	}, [selectedCurrencys])
+	React.useEffect(() => {
+		const graph = {};
+		for (const { base, quote, rate } of rates) {
+			graph[base] ??= [];
+			graph[quote] ??= [];
+			graph[base].push([quote, rate]);
+			graph[quote].push([base, 1 / rate]);
+		}
+		setRatesGraph(graph)
+	}, [rates])
 
 	const addCurrency = (currency) => {
 		if (!selectedCurrencys.some(c => c.iso_code === currency.iso_code)) {
@@ -114,6 +136,30 @@ const App = () => {
 		clearDrag()
 	}
 
+	function convertCurrency(amount, from, to) {
+		const queue = [[from, amount]];
+		const visited = new Set();
+		while (queue.length) {
+			const [cur, val] = queue.shift();
+			if (cur === to) {
+				return +val.toFixed(4);
+			}
+			if (visited.has(cur)) continue;
+			visited.add(cur);
+			for (const [next, rate] of ratesGraph[cur] || []) {
+				queue.push([next, val * rate]);
+			}
+		}
+		return 0;
+	}
+
+	const [currentAmount, setCurrentAmount] = React.useState(0)
+	const [currentCurrencyFrom, setCurrentCurrencyFrom] = React.useState(null)
+	const handleAmountChange = (amount, fromCurrency) => {
+		setCurrentAmount(amount)
+		setCurrentCurrencyFrom(fromCurrency.iso_code)
+	}
+
 	return (
 		<React.Fragment>
 			<div className="p-4 flex flex-col gap-2 w-xl max-w-full mx-auto">
@@ -133,17 +179,18 @@ const App = () => {
 						key={`${currency.iso_code}-${index}`}
 						currency={currency}
 						index={index}
+						value={convertCurrency(currentAmount, currentCurrencyFrom, currency.iso_code)}
 						refCallback={element => cardRefs.current[index] = element}
 						dragState={dragState}
 						onHandlePointerDown={handleDragHandlePointerDown}
 						onHandlePointerMove={handleDragHandlePointerMove}
 						onHandlePointerUp={handleDragHandlePointerUp}
 						onHandlePointerCancel={handleDragHandlePointerCancel}
+						onAmountChange={handleAmountChange}
 						onRemove={() => setSelectedCurrencys(prev => prev.filter(c => c.iso_code !== currency.iso_code))}
 					/>
 				))}
 			</div>
-
 
 			{showAddPopup && (
 				<AddCurrencyPopup
@@ -161,6 +208,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App/>)
 const CurrencyCard = ({
 	currency,
 	index,
+	value,
 	refCallback,
 	dragState,
 	onHandlePointerDown,
@@ -168,9 +216,27 @@ const CurrencyCard = ({
 	onHandlePointerUp,
 	onHandlePointerCancel,
 	onRemove,
+	onAmountChange
 }) => {
 	const isDragged = dragState?.fromIndex === index
 	const isDropTarget = dragState?.toIndex === index && dragState?.fromIndex !== index
+
+	const [localVal, setLocalVal] = React.useState("");
+	const handleChange = (e) => {
+		const raw = e.target.value
+		setLocalVal(raw)
+		const n = parseFloat(raw)
+		if (!isNaN(n) && n >= 0) {
+			onAmountChange(n, currency)
+		}
+		if (raw.trim() === "") {
+			onAmountChange(0, currency)
+		}
+	}
+
+	React.useEffect(() => {
+		setLocalVal(value)
+	}, [value])
 
 	return (
 		<div ref={refCallback}
@@ -198,6 +264,8 @@ const CurrencyCard = ({
 				<div className="flex items-center gap-1">
 					<input className="text-right outline-none w-full"
 						type="number" inputMode="decimal" min="0" placeholder="0"
+						value={localVal || ""}
+						onChange={handleChange}
 					/>
 					<span className="font-medium font-mono text-xl">{currency.symbol}</span>
 				</div>
