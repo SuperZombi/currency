@@ -48,11 +48,9 @@ const App = () => {
 	React.useEffect(() => {
 		if (currencies.length > 0) {
 			const savedSelectedCurrencies = localStorage.getItem('selectedCurrencies')
-			if (savedSelectedCurrencies) {
-				const currencies_loaded = JSON.parse(savedSelectedCurrencies)
-				const currencies_list = currencies_loaded.length > 0 ? currencies_loaded : ["eur", "usd"]
-				setSelectedCurrencies(currencies_list.map(iso_code => currencies.find(c => c.iso_code.toLowerCase() === iso_code.toLowerCase())).filter(Boolean))
-			}
+			const currencies_list = savedSelectedCurrencies && JSON.parse(savedSelectedCurrencies).length > 0 ?
+				JSON.parse(savedSelectedCurrencies) : ["eur", "usd"]
+			setSelectedCurrencies(currencies_list.map(iso_code => currencies.find(c => c.iso_code.toLowerCase() === iso_code.toLowerCase())).filter(Boolean))
 		}
 	}, [currencies])
 	React.useEffect(() => {
