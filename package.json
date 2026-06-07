@@ -1,0 +1,17 @@
+{
+  "name": "currency",
+  "version": "1.0.0",
+  "scripts": {
+    "build:js": "node build.js",
+    "build:css": "npx @tailwindcss/cli -i ./web_dev/src/tailwind.css -o ./web/dist/tailwind.css --minify",
+    "prepare-web": "node prepare-web.js",
+    "build": "npm run build:js && npm run build:css && npm run prepare-web"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.11",
+    "esbuild": "^0.25.8",
+    "fs-extra": "^11.3.0",
+    "glob": "^11.0.3",
+    "tailwindcss": "^4.1.11"
+  }
+}
