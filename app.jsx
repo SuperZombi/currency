@@ -4,7 +4,7 @@ const App = () => {
 	const [ratesTime, setRatesTime] = React.useState(null)
 	const [ratesGraph, setRatesGraph] = React.useState({})
 	const [showAddPopup, setShowAddPopup] = React.useState(false)
-	const [selectedCurrencys, setSelectedCurrencys] = React.useState([])
+	const [selectedCurrencies, setSelectedCurrencies] = React.useState([])
 	const [dragState, setDragState] = React.useState(null)
 	const cardRefs = React.useRef([])
 	const dragRef = React.useRef(null)
@@ -45,14 +45,14 @@ const App = () => {
 			loadRates()
 		}
 
-		const savedSelectedCurrencys = localStorage.getItem('selectedCurrencys')
-		if (savedSelectedCurrencys) {
-			setSelectedCurrencys(JSON.parse(savedSelectedCurrencys))
+		const savedSelectedCurrencies = localStorage.getItem('selectedCurrencies')
+		if (savedSelectedCurrencies) {
+			setSelectedCurrencies(JSON.parse(savedSelectedCurrencies))
 		}
 	}, [])
 	React.useEffect(() => {
-		localStorage.setItem('selectedCurrencys', JSON.stringify(selectedCurrencys))
-	}, [selectedCurrencys])
+		localStorage.setItem('selectedCurrencies', JSON.stringify(selectedCurrencies))
+	}, [selectedCurrencies])
 	React.useEffect(() => {
 		const graph = {};
 		for (const { base, quote, rate } of rates) {
@@ -65,15 +65,15 @@ const App = () => {
 	}, [rates])
 
 	const addCurrency = (currency) => {
-		if (!selectedCurrencys.some(c => c.iso_code === currency.iso_code)) {
-			setSelectedCurrencys(prev => [...prev, {...currency}])
+		if (!selectedCurrencies.some(c => c.iso_code === currency.iso_code)) {
+			setSelectedCurrencies(prev => [...prev, {...currency}])
 		}
 	}
 
 	const moveCurrency = (fromIndex, toIndex) => {
 		if (fromIndex === toIndex || fromIndex === null || toIndex === null) return
 
-		setSelectedCurrencys(prev => {
+		setSelectedCurrencies(prev => {
 			if (fromIndex < 0 || fromIndex >= prev.length || toIndex < 0 || toIndex > prev.length) return prev
 
 			const updated = [...prev]
@@ -209,7 +209,7 @@ const App = () => {
 					<span>Add Currency</span>
 				</div>
 
-				{selectedCurrencys.map((currency, index) => (
+				{selectedCurrencies.map((currency, index) => (
 					<CurrencyCard
 						key={`${currency.iso_code}-${index}`}
 						currency={currency}
@@ -222,7 +222,7 @@ const App = () => {
 						onHandlePointerUp={handleDragHandlePointerUp}
 						onHandlePointerCancel={handleDragHandlePointerCancel}
 						onAmountChange={handleAmountChange}
-						onRemove={() => setSelectedCurrencys(prev => prev.filter(c => c.iso_code !== currency.iso_code))}
+						onRemove={() => setSelectedCurrencies(prev => prev.filter(c => c.iso_code !== currency.iso_code))}
 					/>
 				))}
 			</div>
@@ -230,7 +230,7 @@ const App = () => {
 			{showAddPopup && (
 				<AddCurrencyPopup
 					currencies={currencies}
-					selectedCurrencys={selectedCurrencys}
+					selectedCurrencies={selectedCurrencies}
 					onClose={() => setShowAddPopup(false)}
 					addCurrency={addCurrency}
 				/>
@@ -312,12 +312,12 @@ const CurrencyCard = ({
 }
 
 const AddCurrencyPopup = ({
-	currencies, selectedCurrencys, onClose, addCurrency
+	currencies, selectedCurrencies, onClose, addCurrency
 }) => {
 	const [query, setQuery] = React.useState('')
 	const filteredCurrencies = currencies.filter(currency =>
 		currency.iso_code.toLowerCase().includes(query.toLowerCase()) || currency.name.toLowerCase().includes(query.toLowerCase())
-	).filter(currency => !selectedCurrencys.some(c => c.iso_code === currency.iso_code))
+	).filter(currency => !selectedCurrencies.some(c => c.iso_code === currency.iso_code))
 
 	return (
 		<Popup title="Add Currency" width="w-96" onClose={onClose}>
