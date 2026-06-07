@@ -300,15 +300,15 @@ const CurrencyCard = ({
 				<span>{currency.symbol}</span>
 				<span>{currency.iso_code}</span>
 			</div>
-			<div className="flex items-center gap-3 w-full">
+			<div className="flex items-center gap-4 w-full">
 				<div className="flex items-center gap-1 w-full">
-					<input className="no-spinner text-right outline-none w-full text-black dark:text-white dark:scheme-dark"
+					<input className="no-spinner text-right font-mono outline-none w-full text-black dark:text-white dark:scheme-dark"
 						type="number" inputMode="decimal" min="0" placeholder="0"
 						value={localVal || ""}
 						onChange={handleChange}
 					/>
 				</div>
-				<i className="fa-solid fa-circle-xmark cursor-pointer text-gray-500 hover:text-red-500 transition text-lg"
+				<i className="fa-solid fa-circle-xmark cursor-pointer text-gray-500 hover:text-red-500 transition"
 					onClick={onRemove}
 				></i>
 			</div>
