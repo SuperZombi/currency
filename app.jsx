@@ -1,6 +1,7 @@
 const App = () => {
 	const [currencies, setCurrencies] = React.useState([])
 	const [rates, setRates] = React.useState([])
+	const [ratesTime, setRatesTime] = React.useState(null)
 	const [ratesGraph, setRatesGraph] = React.useState({})
 	const [showAddPopup, setShowAddPopup] = React.useState(false)
 	const [selectedCurrencys, setSelectedCurrencys] = React.useState([])
@@ -20,12 +21,18 @@ const App = () => {
 		}
 
 		const savedRates = localStorage.getItem('rates')
-		if (savedRates) {
+		const savedRatesTime = localStorage.getItem('ratesTime')
+		const now = Date.now()
+		if (savedRates && savedRatesTime && now - JSON.parse(savedRatesTime) < 12 * 60 * 60 * 1000) {
 			setRates(JSON.parse(savedRates))
+			setRatesTime(JSON.parse(savedRatesTime))
 		} else {
 			fetch('https://api.frankfurter.dev/v2/rates').then(res => res.json()).then(data => {
 				setRates(data)
 				localStorage.setItem('rates', JSON.stringify(data))
+				const now = Date.now()
+				setRatesTime(now)
+				localStorage.setItem('ratesTime', JSON.stringify(now))
 			})
 		}
 
@@ -162,6 +169,13 @@ const App = () => {
 
 	return (
 		<React.Fragment>
+			<div className="pt-4 text-center">
+				{ratesTime && (
+					<span className="text-sm text-gray-500 italic">
+						Updated at {new Date(ratesTime).toLocaleString()}
+					</span>
+				)}
+			</div>
 			<div className="p-4 flex flex-col gap-2 w-xl max-w-full mx-auto">
 				<div className="
 					border px-4 py-2
@@ -256,18 +270,17 @@ const CurrencyCard = ({
 			>
 				<i className="fa-solid fa-bars pointer-events-none"></i>
 			</button>
-			<div className="flex flex-col select-none whitespace-nowrap">
-				<span className="font-mono font-bold">{currency.iso_code}</span>
-				<span className="text-sm text-gray-500">{currency.name}</span>
+			<div className="flex select-none whitespace-nowrap items-center gap-1 font-mono font-medium">
+				<span>{currency.symbol}</span>
+				<span>{currency.iso_code}</span>
 			</div>
-			<div className="ml-auto flex items-center gap-3">
-				<div className="flex items-center gap-1">
+			<div className="flex items-center gap-3 w-full">
+				<div className="flex items-center gap-1 w-full">
 					<input className="text-right outline-none w-full"
 						type="number" inputMode="decimal" min="0" placeholder="0"
 						value={localVal || ""}
 						onChange={handleChange}
 					/>
-					<span className="font-medium font-mono text-xl">{currency.symbol}</span>
 				</div>
 				<i className="fa-regular fa-circle-xmark cursor-pointer text-gray-500 hover:text-red-500 transition text-lg"
 					onClick={onRemove}
