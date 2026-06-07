@@ -168,7 +168,7 @@ const App = () => {
 	}
 
 	return (
-		<div className="dark:bg-zinc-900 dark:text-white min-h-dvh">
+		<div className="dark:bg-zinc-900 dark:text-white min-h-dvh transition">
 			<div className="pt-4 text-center">
 				{ratesTime && (
 					<span className="text-sm text-gray-500 italic">
@@ -277,7 +277,7 @@ const CurrencyCard = ({
 			</div>
 			<div className="flex items-center gap-3 w-full">
 				<div className="flex items-center gap-1 w-full">
-					<input className="text-right outline-none w-full"
+					<input className="text-right outline-none w-full text-black dark:text-white dark:scheme-dark"
 						type="number" inputMode="decimal" min="0" placeholder="0"
 						value={localVal || ""}
 						onChange={handleChange}
