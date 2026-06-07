@@ -44,14 +44,21 @@ const App = () => {
 		} else {
 			loadRates()
 		}
-
-		const savedSelectedCurrencies = localStorage.getItem('selectedCurrencies')
-		if (savedSelectedCurrencies) {
-			setSelectedCurrencies(JSON.parse(savedSelectedCurrencies))
-		}
 	}, [])
 	React.useEffect(() => {
-		localStorage.setItem('selectedCurrencies', JSON.stringify(selectedCurrencies))
+		if (currencies.length > 0) {
+			const savedSelectedCurrencies = localStorage.getItem('selectedCurrencies')
+			if (savedSelectedCurrencies) {
+				const currencies_loaded = JSON.parse(savedSelectedCurrencies)
+				const currencies_list = currencies_loaded.length > 0 ? currencies_loaded : ["eur", "usd"]
+				setSelectedCurrencies(currencies_list.map(iso_code => currencies.find(c => c.iso_code.toLowerCase() === iso_code.toLowerCase())).filter(Boolean))
+			}
+		}
+	}, [currencies])
+	React.useEffect(() => {
+		if (currencies.length > 0) {
+			localStorage.setItem('selectedCurrencies', JSON.stringify(selectedCurrencies.map(c => c.iso_code.toLowerCase())))
+		}
 	}, [selectedCurrencies])
 	React.useEffect(() => {
 		const graph = {};
