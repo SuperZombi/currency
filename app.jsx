@@ -9,15 +9,34 @@ const App = () => {
 	const cardRefs = React.useRef([])
 	const dragRef = React.useRef(null)
 
+	const [loadingApiData, setLoadingApiData] = React.useState(false)
+	
+	function loadCurrencies() {
+		return fetch('https://api.frankfurter.dev/v2/currencies').then(res => res.json()).then(data => {
+			setCurrencies(data)
+			localStorage.setItem('currencies', JSON.stringify(data))
+		})
+	}
+	function loadRates() {
+		return fetch('https://api.frankfurter.dev/v2/rates').then(res => res.json()).then(data => {
+			setRates(data)
+			localStorage.setItem('rates', JSON.stringify(data))
+			const now = Date.now()
+			setRatesTime(now)
+			localStorage.setItem('ratesTime', JSON.stringify(now))
+		})
+	}
+	async function loadApiData() {
+		setLoadingApiData(true)
+		await Promise.all([loadCurrencies(), loadRates()])
+		setLoadingApiData(false)
+	}
 	React.useEffect(() => {
 		const savedCurrencies = localStorage.getItem('currencies')
 		if (savedCurrencies) {
 			setCurrencies(JSON.parse(savedCurrencies))
 		} else {
-			fetch('https://api.frankfurter.dev/v2/currencies').then(res => res.json()).then(data => {
-				setCurrencies(data)
-				localStorage.setItem('currencies', JSON.stringify(data))
-			})
+			loadCurrencies()
 		}
 
 		const savedRates = localStorage.getItem('rates')
@@ -27,13 +46,7 @@ const App = () => {
 			setRates(JSON.parse(savedRates))
 			setRatesTime(JSON.parse(savedRatesTime))
 		} else {
-			fetch('https://api.frankfurter.dev/v2/rates').then(res => res.json()).then(data => {
-				setRates(data)
-				localStorage.setItem('rates', JSON.stringify(data))
-				const now = Date.now()
-				setRatesTime(now)
-				localStorage.setItem('ratesTime', JSON.stringify(now))
-			})
+			loadRates()
 		}
 
 		const savedSelectedCurrencys = localStorage.getItem('selectedCurrencys')
@@ -169,13 +182,24 @@ const App = () => {
 
 	return (
 		<div className="dark:bg-zinc-900 dark:text-white min-h-dvh transition">
-			<div className="pt-4 text-center">
-				{ratesTime && (
+			<div className="flex items-center justify-center gap-3 p-4 border-b border-gray-500 select-none">
+				<img className="h-9" src="icon.png" draggable={false} />
+				<span className="font-bold uppercase text-lg">Currency Converter</span>
+			</div>
+			{ratesTime && (
+				<div className="pt-4 flex items-center justify-center gap-3">
 					<span className="text-sm text-gray-500 italic">
 						Updated at {new Date(ratesTime).toLocaleString()}
 					</span>
-				)}
-			</div>
+					<button className={`cursor-pointer p-1.5 aspect-square border border-gray-500 rounded-lg text-xs
+						${loadingApiData ? '' : 'hover:bg-gray-100 transition dark:hover:bg-gray-700'}
+					`}
+						onClick={() => {loadApiData()}} disabled={loadingApiData}
+					>
+						<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
+					</button>
+				</div>
+			)}
 			<div className="p-4 flex flex-col gap-2 w-xl max-w-full mx-auto">
 				<div className="
 					border border-gray-500 px-4 py-2
