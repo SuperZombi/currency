@@ -11,32 +11,28 @@ const App = () => {
 
 	const [loadingApiData, setLoadingApiData] = React.useState(false)
 	
-	function loadCurrencies() {
-		return fetch('https://api.frankfurter.dev/v2/currencies').then(res => res.json()).then(data => {
-			setCurrencies(data)
-			localStorage.setItem('currencies', JSON.stringify(data))
-		})
-	}
 	function loadRates() {
-		return fetch('https://api.frankfurter.dev/v2/rates').then(res => res.json()).then(data => {
+		setLoadingApiData(true)
+		fetch('https://api.frankfurter.dev/v2/rates').then(res => res.json()).then(data => {
 			setRates(data)
 			localStorage.setItem('rates', JSON.stringify(data))
 			const now = Date.now()
 			setRatesTime(now)
 			localStorage.setItem('ratesTime', JSON.stringify(now))
+			setLoadingApiData(false)
+		}).catch(() => {
+			setLoadingApiData(false)
 		})
-	}
-	async function loadApiData() {
-		setLoadingApiData(true)
-		await Promise.all([loadCurrencies(), loadRates()])
-		setLoadingApiData(false)
 	}
 	React.useEffect(() => {
 		const savedCurrencies = localStorage.getItem('currencies')
 		if (savedCurrencies) {
 			setCurrencies(JSON.parse(savedCurrencies))
 		} else {
-			loadCurrencies()
+			fetch('https://api.frankfurter.dev/v2/currencies').then(res => res.json()).then(data => {
+				setCurrencies(data)
+				localStorage.setItem('currencies', JSON.stringify(data))
+			})
 		}
 
 		const savedRates = localStorage.getItem('rates')
@@ -194,7 +190,7 @@ const App = () => {
 					<button className={`cursor-pointer p-1.5 aspect-square border border-gray-500 rounded-lg text-xs
 						${loadingApiData ? '' : 'hover:bg-gray-100 transition dark:hover:bg-gray-700'}
 					`}
-						onClick={() => {loadApiData()}} disabled={loadingApiData}
+						onClick={() => {loadRates()}} disabled={loadingApiData}
 					>
 						<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
 					</button>
