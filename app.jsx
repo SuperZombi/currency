@@ -168,7 +168,7 @@ const App = () => {
 	}
 
 	return (
-		<React.Fragment>
+		<div className="dark:bg-zinc-900 dark:text-white min-h-dvh">
 			<div className="pt-4 text-center">
 				{ratesTime && (
 					<span className="text-sm text-gray-500 italic">
@@ -178,10 +178,11 @@ const App = () => {
 			</div>
 			<div className="p-4 flex flex-col gap-2 w-xl max-w-full mx-auto">
 				<div className="
-					border px-4 py-2
+					border border-gray-500 px-4 py-2
 					flex gap-2 items-center justify-center
 					cursor-pointer rounded-xl
 					hover:bg-gray-100 transition select-none
+					dark:hover:bg-gray-700
 				" onClick={() => setShowAddPopup(true)}
 				>
 					<i className="fa-solid fa-plus"></i>
@@ -214,7 +215,7 @@ const App = () => {
 					addCurrency={addCurrency}
 				/>
 			)}
-		</React.Fragment>
+		</div>
 	)
 }
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>)
@@ -254,15 +255,15 @@ const CurrencyCard = ({
 
 	return (
 		<div ref={refCallback}
-			className={`animate-[fadeIn_0.2s_ease_forwards]
-				border p-3 rounded-xl flex items-center gap-3 transition
+			className={`animate-[fadeIn_0.2s_ease_backwards]
+				border border-gray-500 p-3 rounded-xl flex items-center gap-3 transition
 				${isDragged ? 'opacity-50 scale-95' : ''}
-				${isDropTarget ? 'border-blue-500 bg-blue-50' : ''}
+				${isDropTarget ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/50' : ''}
 			`}
 		>
 			<button type="button"
 				aria-label={`Drag ${currency.iso_code}`}
-				className="shrink-0 cursor-grab active:cursor-grabbing touch-none p-2 -m-2 text-gray-500 hover:text-gray-900 transition"
+				className="shrink-0 cursor-move touch-none p-2 -m-2 text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 transition"
 				onPointerDown={(event) => onHandlePointerDown(event, index)}
 				onPointerMove={onHandlePointerMove}
 				onPointerUp={onHandlePointerUp}
@@ -306,11 +307,12 @@ const AddCurrencyPopup = ({
 					value={query} onChange={e => setQuery(e.target.value)}
 				/>
 			</div>
-			<div className="max-h-96 overflow-y-auto scrollbar-thin">
+			<div className="max-h-96 overflow-y-auto scrollbar-thin dark:scheme-dark">
 				{filteredCurrencies.map((currency, index) => (
 					<div key={index} className="
 						grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3 cursor-pointer
 						hover:bg-gray-100 transition select-none
+						dark:hover:bg-gray-700
 					" onClick={() => {addCurrency(currency); onClose()}}>
 						<span className="justify-self-center font-mono font-semibold">{currency.iso_code}</span>
 						<span>{currency.name}</span>
@@ -328,10 +330,10 @@ const Popup = ({children, onClose, title, width}) => {
 		}
 	}
 	return (
-		<div className="animate-[fadeIn_0.22s_ease_forwards] fixed inset-0 bg-black/50 flex items-center justify-center" onClick={handleClick}>
+		<div className="animate-[fadeIn_0.22s_ease_both] fixed inset-0 bg-black/50 flex items-center justify-center" onClick={handleClick}>
 			<div className={`
-				animate-[modalIn_0.22s_ease_forwards]
-				bg-white rounded-xl divide-y overflow-hidden
+				animate-[modalIn_0.22s_ease_both]
+				bg-white dark:bg-zinc-900 dark:text-white rounded-xl divide-y dark:divide-gray-600 overflow-hidden
 				${width} max-w-[calc(100%-theme(spacing.4))]
 			`}>
 				<h2 className="font-bold p-3 relative text-center select-none">
