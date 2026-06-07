@@ -1,4 +1,12 @@
 @import "tailwindcss";
+.no-spinner {
+	appearance: textfield;
+}
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+	appearance: none;
+	margin: 0;
+}
 @keyframes modalIn {
 	0% {
 		opacity: 0;

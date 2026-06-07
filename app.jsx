@@ -301,7 +301,7 @@ const CurrencyCard = ({
 			</div>
 			<div className="flex items-center gap-3 w-full">
 				<div className="flex items-center gap-1 w-full">
-					<input className="text-right outline-none w-full text-black dark:text-white dark:scheme-dark"
+					<input className="no-spinner text-right outline-none w-full text-black dark:text-white dark:scheme-dark"
 						type="number" inputMode="decimal" min="0" placeholder="0"
 						value={localVal || ""}
 						onChange={handleChange}
