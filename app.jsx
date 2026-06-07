@@ -54,7 +54,7 @@ const App = () => {
 
 		for (let index = 0; index < cards.length; index++) {
 			const rect = cards[index].getBoundingClientRect()
-			if (clientY < rect.top + rect.height / 2) {
+			if (clientY <= rect.bottom) {
 				return index
 			}
 		}
