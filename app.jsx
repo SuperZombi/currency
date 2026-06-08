@@ -351,8 +351,8 @@ const AddCurrencyPopup = ({
 					{filteredCurrencies.map((currency, index) => (
 						<div key={index} className="
 							grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3 cursor-pointer
-							hover:bg-gray-100 transition select-none
-							dark:hover:bg-gray-700
+							hover:bg-zinc-200 transition select-none
+							dark:hover:bg-zinc-700
 						" onClick={() => {addCurrency(currency); onClose()}}>
 							<span className="justify-self-center font-mono font-semibold">{currency.iso_code}</span>
 							<span>{currency.name}</span>
@@ -381,12 +381,12 @@ const Popup = ({children, onClose, title, width}) => {
 				<h2 className="p-3 relative text-center select-none">
 					<span className="font-bold text-lg">{title}</span>
 					<div className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer
-						w-6 h-6 flex items-center justify-center rounded-full
+						w-6 h-6 flex items-center justify-center rounded-full text-xs
 						text-white bg-red-500 hover:bg-red-700 active:bg-red-700 transition
 					"
 						onClick={onClose}
 					>
-						<i className="fa-solid fa-xmark text-xs"></i>
+						<i className="fa-solid fa-xmark"></i>
 					</div>
 				</h2>
 				{children}
