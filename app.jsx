@@ -169,6 +169,7 @@ const App = () => {
 								dragHandleProps={provided.dragHandleProps}
 								isDragging={snapshot.isDragging}
 								currency={currency}
+								currentCurrency={currentCurrencyFrom}
 								value={convertCurrency(currentAmount, currentCurrencyFrom, currency.iso_code)}
 								onAmountChange={handleAmountChange}
 								onRemove={() => setSelectedCurrencies(prev => prev.filter(c => c.iso_code !== currency.iso_code))}
@@ -196,6 +197,7 @@ const CurrencyCard = ({
 	value,
 	onRemove,
 	onAmountChange,
+	currentCurrency,
 }) => {
 	const [localVal, setLocalVal] = React.useState("");
 	const handleChange = (e) => {
@@ -212,6 +214,11 @@ const CurrencyCard = ({
 	React.useEffect(() => {
 		setLocalVal(value)
 	}, [value])
+	const setCurrentField = () => {
+		if (currentCurrency != currency.iso_code){
+			onAmountChange(0, currency)
+		}
+	}
 
 	return (
 		<div ref={innerRef}
@@ -240,6 +247,7 @@ const CurrencyCard = ({
 						type="number" inputMode="decimal" min="0" placeholder="0"
 						value={localVal || ""}
 						onChange={handleChange}
+						onClick={setCurrentField}
 					/>
 				</div>
 				<i className="fa-solid fa-circle-xmark cursor-pointer text-gray-500 hover:text-red-500 transition"
