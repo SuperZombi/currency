@@ -223,7 +223,7 @@ const CurrencyCard = ({
 	return (
 		<div ref={innerRef}
 			className={`
-				flex items-center gap-3 transition
+				flex items-center gap-3 transition-colors
 				border border-zinc-200 dark:border-zinc-700
 				rounded-2xl p-4 shadow-sm
 				bg-white dark:bg-zinc-900
