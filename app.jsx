@@ -378,12 +378,15 @@ const Popup = ({children, onClose, title, width}) => {
 				border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden
 				${width} max-w-[calc(100%-theme(spacing.4))]
 			`}>
-				<h2 className="font-bold p-3 relative text-center select-none">
-					<span>{title}</span>
-					<div className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer"
+				<h2 className="p-3 relative text-center select-none">
+					<span className="font-bold text-lg">{title}</span>
+					<div className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer
+						w-6 h-6 flex items-center justify-center rounded-full
+						text-white bg-red-500 hover:bg-red-700 active:bg-red-700 transition
+					"
 						onClick={onClose}
 					>
-						<i className="fa-solid fa-circle-xmark text-red-500 text-xl hover:text-red-700 active:text-red-700 transition"></i>
+						<i className="fa-solid fa-xmark text-xs"></i>
 					</div>
 				</h2>
 				{children}
