@@ -114,31 +114,46 @@ const App = () => {
 
 	return (
 		<div className="dark:bg-zinc-900 dark:text-white min-h-dvh transition">
-			<div className="flex items-center justify-center gap-3 p-4 border-b border-zinc-200 dark:border-zinc-700 select-none">
-				<img className="h-9" src="icon.png" draggable={false} />
-				<span className="font-bold uppercase text-lg">Currency Converter</span>
-			</div>
-			{ratesTime && (
-				<div className="pt-4 flex items-center justify-center gap-3">
-					<span className="text-sm text-gray-500 italic">
-						Updated at <span>{new Date(ratesTime).toLocaleString()}</span>
-					</span>
-					<div className={`h-7 w-7 rounded-lg text-xs
-						flex items-center justify-center
-						border border-zinc-200 dark:border-zinc-700
-						bg-zinc-100 dark:bg-zinc-800
-						text-gray-700 dark:text-gray-100 transition
-						${loadingApiData ? '' : `cursor-pointer
-							hover:bg-zinc-200 active:bg-zinc-200
-							dark:hover:bg-zinc-700 dark:active:bg-zinc-700
-						`}
-					`}
-						onClick={() => {loadRates()}} disabled={loadingApiData}
-					>
-						<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
+			<div className="p-4 border-b border-zinc-200 dark:border-zinc-700 select-none">
+				<div className="flex items-center justify-between gap-3 w-lg max-w-full mx-auto">
+					<div className="flex items-center gap-3">
+						<img className="h-9" src="icon.png" draggable={false} />
+						<div className="flex flex-col">
+							<span className="font-bold uppercase text-lg">Currency Converter</span>
+							{ratesTime && (
+								<span className="text-xs text-gray-500 flex gap-1">
+									<span>Updated at</span>
+									<span>{new Date(ratesTime).toLocaleString(undefined, {
+											day: "2-digit",
+											month: "2-digit",
+											year: "2-digit",
+											hour: "2-digit",
+											minute: "2-digit",
+											hour12: false
+										})}
+									</span>
+								</span>
+							)}
+						</div>
 					</div>
+					{ratesTime && (
+						<div className={`h-7 w-7 rounded-lg text-xs
+							flex items-center justify-center
+							border border-zinc-200 dark:border-zinc-700
+							bg-zinc-100 dark:bg-zinc-800
+							text-gray-700 dark:text-gray-100 transition
+							${loadingApiData ? '' : `cursor-pointer
+								hover:bg-zinc-200 active:bg-zinc-200
+								dark:hover:bg-zinc-700 dark:active:bg-zinc-700
+							`}
+						`}
+							onClick={() => {loadRates()}} disabled={loadingApiData}
+						>
+							<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
+						</div>
+					)}
 				</div>
-			)}
+			</div>
 
 			<div className="fixed bottom-5 right-5 h-14 w-14 rounded-full shadow-lg text-xl flex items-center justify-center cursor-pointer
 				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10 transition"
@@ -292,7 +307,7 @@ const AddCurrencyPopup = ({
 	).filter(currency => !selectedCurrencies.some(c => c.iso_code === currency.iso_code))
 
 	return (
-		<Popup title="Add Currency" width="w-96" onClose={onClose}>
+		<Popup title="Add Currency" width="w-lg" onClose={onClose}>
 			<div className="grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3">
 				<i className="fa-solid fa-magnifying-glass justify-self-center"></i>
 				<input className="outline-none text-black dark:text-white" type="search" placeholder="Code or name..."
