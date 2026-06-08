@@ -8,6 +8,7 @@ const FILES = [
 	"./tailwind.css",
 	"./react.production.min.js",
 	"./react-dom.production.min.js",
+	"./dnd.min.js",
 	"./fontawesome/css/all.css",
 	"./fontawesome/webfonts/fa-solid-900.woff2"
 ];
