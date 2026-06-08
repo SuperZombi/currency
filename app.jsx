@@ -249,8 +249,9 @@ const CurrencyCard = ({
 				flex flex-col gap-3 transition-colors
 				border border-zinc-200 dark:border-zinc-700
 				rounded-2xl p-4 shadow-sm
-				bg-white dark:bg-zinc-900
-				${isDragging ? 'opacity-75 scale-95' : ''}
+				bg-white/25 dark:bg-zinc-900/25
+				backdrop-blur-sm
+				${isDragging ? 'scale-95' : ''}
 			`}
 			{...draggableProps}
 		>
@@ -339,7 +340,7 @@ const Popup = ({children, onClose, title, width}) => {
 		}
 	}
 	return (
-		<div className="animate-[fadeIn_0.22s_ease_both] fixed z-20 inset-0 bg-black/50 flex items-center justify-center" onClick={handleClick}>
+		<div className="animate-[fadeIn_0.22s_ease_both] backdrop-blur-xs fixed z-20 inset-0 bg-black/50 flex items-center justify-center" onClick={handleClick}>
 			<div className={`
 				animate-[modalIn_0.22s_ease_both]
 				bg-white dark:bg-zinc-900 dark:text-white rounded-xl divide-y divide-zinc-200 dark:divide-zinc-700
