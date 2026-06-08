@@ -320,10 +320,23 @@ const CurrencyCard = ({
 const AddCurrencyPopup = ({
 	currencies, selectedCurrencies, onClose, addCurrency
 }) => {
+	const currencyNames = new Intl.DisplayNames(undefined, {
+		type: 'currency'
+	})
 	const [query, setQuery] = React.useState('')
-	const filteredCurrencies = currencies.filter(currency =>
-		currency.iso_code.toLowerCase().includes(query.toLowerCase()) || currency.name.toLowerCase().includes(query.toLowerCase())
-	).filter(currency => !selectedCurrencies.some(c => c.iso_code === currency.iso_code))
+	const q = query.toLowerCase()
+	const filteredCurrencies = currencies
+	.filter(currency => {
+		const localizedName = currencyNames.of(currency.iso_code)?.toLowerCase() || ''
+		return (
+			currency.iso_code.toLowerCase().includes(q) ||
+			currency.name.toLowerCase().includes(q) ||
+			localizedName.includes(q)
+		)
+	})
+	.filter(currency =>
+		!selectedCurrencies.some(c => c.iso_code === currency.iso_code)
+	)
 
 	return (
 		<Popup title="Add Currency" width="w-lg" onClose={onClose}>
