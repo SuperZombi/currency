@@ -230,6 +230,7 @@ const CurrencyCard = ({
 	return (
 		<div ref={innerRef}
 			className={`
+				animate-[modalIn_0.5s_ease_backwards]
 				flex flex-col gap-3 transition-colors
 				border border-zinc-200 dark:border-zinc-700
 				rounded-2xl p-4 shadow-sm
@@ -264,7 +265,7 @@ const CurrencyCard = ({
 					"
 						onClick={onRemove}
 					>
-						<i class="fa-solid fa-xmark"></i>
+						<i className="fa-solid fa-xmark"></i>
 					</div>
 				</div>
 			</div>
