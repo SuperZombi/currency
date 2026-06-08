@@ -123,13 +123,20 @@ const App = () => {
 					<span className="text-sm text-gray-500 italic">
 						Updated at <span>{new Date(ratesTime).toLocaleString()}</span>
 					</span>
-					<button className={`cursor-pointer p-1.5 aspect-square border border-gray-500 rounded-lg text-xs
-						${loadingApiData ? '' : 'hover:bg-gray-100 transition dark:hover:bg-gray-700'}
+					<div className={`h-7 w-7 rounded-lg text-xs
+						flex items-center justify-center
+						border border-zinc-200 dark:border-zinc-700
+						bg-zinc-100 dark:bg-zinc-800
+						text-gray-700 dark:text-gray-100 transition
+						${loadingApiData ? '' : `cursor-pointer
+							hover:bg-zinc-200 active:bg-zinc-200
+							dark:hover:bg-zinc-700 dark:active:bg-zinc-700
+						`}
 					`}
 						onClick={() => {loadRates()}} disabled={loadingApiData}
 					>
 						<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
-					</button>
+					</div>
 				</div>
 			)}
 
