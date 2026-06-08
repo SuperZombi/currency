@@ -201,19 +201,13 @@ const App = () => {
 					</button>
 				</div>
 			)}
+			<div className="fixed bottom-5 right-5 h-14 w-14 rounded-full shadow-lg text-xl flex items-center justify-center cursor-pointer
+				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 transition"
+				onClick={() => setShowAddPopup(true)}
+			>
+				<i className="fa-solid fa-plus"></i>
+			</div>
 			<div className="p-4 flex flex-col gap-2 w-xl max-w-full mx-auto">
-				<div className="
-					border border-gray-500 px-4 py-2
-					flex gap-2 items-center justify-center
-					cursor-pointer rounded-xl
-					hover:bg-gray-100 transition select-none
-					dark:hover:bg-gray-700
-				" onClick={() => setShowAddPopup(true)}
-				>
-					<i className="fa-solid fa-plus"></i>
-					<span>Add Currency</span>
-				</div>
-
 				{selectedCurrencies.map((currency, index) => (
 					<CurrencyCard
 						key={`${currency.iso_code}-${index}`}
