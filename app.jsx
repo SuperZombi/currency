@@ -114,7 +114,7 @@ const App = () => {
 
 	return (
 		<div className="dark:bg-zinc-900 dark:text-white min-h-dvh transition">
-			<div className="flex items-center justify-center gap-3 p-4 border-b border-gray-500 select-none">
+			<div className="flex items-center justify-center gap-3 p-4 border-b border-zinc-200 dark:border-zinc-700 select-none">
 				<img className="h-9" src="icon.png" draggable={false} />
 				<span className="font-bold uppercase text-lg">Currency Converter</span>
 			</div>
@@ -134,7 +134,7 @@ const App = () => {
 			)}
 
 			<div className="fixed bottom-5 right-5 h-14 w-14 rounded-full shadow-lg text-xl flex items-center justify-center cursor-pointer
-				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 transition"
+				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10 transition"
 				onClick={() => setShowAddPopup(true)}
 			>
 				<i className="fa-solid fa-plus"></i>
@@ -223,7 +223,7 @@ const CurrencyCard = ({
 	return (
 		<div ref={innerRef}
 			className={`
-				flex items-center gap-3 transition-colors
+				flex flex-col gap-3 transition-colors
 				border border-zinc-200 dark:border-zinc-700
 				rounded-2xl p-4 shadow-sm
 				bg-white dark:bg-zinc-900
@@ -231,28 +231,45 @@ const CurrencyCard = ({
 			`}
 			{...draggableProps}
 		>
-			<div
-				className="shrink-0 !cursor-move touch-none p-2 -m-2 text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 transition"
-				{...dragHandleProps}
-			>
-				<i className="fa-solid fa-bars"></i>
-			</div>
-			<div className="flex select-none whitespace-nowrap items-center gap-2 font-mono font-medium">
-				<span>{currency.iso_code}</span>
-				<span className="text-gray-500">{currency.symbol}</span>
-			</div>
-			<div className="flex items-center gap-4 w-full">
-				<div className="flex items-center gap-1 w-full">
-					<input className="no-spinner text-right font-mono outline-none w-full text-black dark:text-white dark:scheme-dark"
-						type="number" inputMode="decimal" min="0" placeholder="0"
-						value={localVal || ""}
-						onChange={handleChange}
-						onClick={setCurrentField}
-					/>
+			<div className="flex justify-between gap-2">
+				<div className="flex flex-col select-none whitespace-nowrap">
+					<span className="text-lg font-bold">{currency.iso_code}</span>
+					<div className="text-sm text-zinc-500">{currency.name}</div>
 				</div>
-				<i className="fa-solid fa-circle-xmark cursor-pointer text-gray-500 hover:text-red-500 transition"
-					onClick={onRemove}
-				></i>
+				<div className="flex items-center gap-2">
+					<div className="h-9 w-9 rounded-xl
+						flex items-center justify-center
+						bg-zinc-100 hover:bg-zinc-200 active:bg-zinc-200
+						dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:active:bg-zinc-700
+						text-gray-500 hover:text-gray-800 active:text-gray-800
+						dark:hover:text-gray-300 dark:active:text-gray-300
+						active:scale-90 transition !cursor-move touch-none
+					"
+						{...dragHandleProps}
+					>
+						<i className="fa-solid fa-bars"></i>
+					</div>
+					<div className="h-9 w-9 rounded-xl
+						flex items-center justify-center
+						bg-red-500/10 hover:bg-red-500/20 active:bg-red-500/20
+						text-red-500 active:scale-90
+						transition cursor-pointer
+					"
+						onClick={onRemove}
+					>
+						<i class="fa-solid fa-xmark"></i>
+					</div>
+				</div>
+			</div>
+			
+			<div className="w-full flex items-center justify-between gap-3">
+				<input className="no-spinner text-2xl font-mono outline-none w-full text-black dark:text-white"
+					type="number" inputMode="decimal" min="0" placeholder="0"
+					value={localVal || ""}
+					onChange={handleChange}
+					onClick={setCurrentField}
+				/>
+				<span className="text-xl font-mono text-zinc-500">{currency.symbol}</span>
 			</div>
 		</div>
 	)
@@ -270,7 +287,7 @@ const AddCurrencyPopup = ({
 		<Popup title="Add Currency" width="w-96" onClose={onClose}>
 			<div className="grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3">
 				<i className="fa-solid fa-magnifying-glass justify-self-center"></i>
-				<input className="outline-none" type="search" placeholder="Code or name..."
+				<input className="outline-none text-black dark:text-white" type="search" placeholder="Code or name..."
 					value={query} onChange={e => setQuery(e.target.value)}
 				/>
 			</div>
@@ -299,10 +316,10 @@ const Popup = ({children, onClose, title, width}) => {
 		}
 	}
 	return (
-		<div className="animate-[fadeIn_0.22s_ease_both] fixed inset-0 bg-black/50 flex items-center justify-center" onClick={handleClick}>
+		<div className="animate-[fadeIn_0.22s_ease_both] fixed z-20 inset-0 bg-black/50 flex items-center justify-center" onClick={handleClick}>
 			<div className={`
 				animate-[modalIn_0.22s_ease_both]
-				bg-white dark:bg-zinc-900 dark:text-white rounded-xl divide-y dark:divide-gray-600 overflow-hidden
+				bg-white dark:bg-zinc-900 dark:text-white rounded-xl divide-y divide-zinc-200 dark:divide-zinc-700 overflow-hidden
 				${width} max-w-[calc(100%-theme(spacing.4))]
 			`}>
 				<h2 className="font-bold p-3 relative text-center select-none">
