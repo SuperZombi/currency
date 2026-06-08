@@ -1,4 +1,4 @@
-const CACHE_NAME = "currency-converter-v3";
+const CACHE_NAME = "currency-converter-v4";
 
 const FILES = [
 	"./",
@@ -14,15 +14,41 @@ const FILES = [
 ];
 
 self.addEventListener("install", event => {
+	self.skipWaiting();
+
 	event.waitUntil(
-		caches.open(CACHE_NAME)
-			.then(cache => cache.addAll(FILES))
-	)
-})
+		caches.open(CACHE_NAME).then(cache => {
+			return cache.addAll(FILES);
+		})
+	);
+});
+
+self.addEventListener("activate", event => {
+	event.waitUntil(
+		Promise.all([
+			caches.keys().then(keys => {
+				return Promise.all(
+					keys.map(key => {
+						if (key !== CACHE_NAME) {
+							return caches.delete(key);
+						}
+					})
+				);
+			}),
+			self.clients.claim()
+		])
+	);
+});
 
 self.addEventListener("fetch", event => {
 	event.respondWith(
-		caches.match(event.request)
-			.then(response => response || fetch(event.request))
-	)
-})
+		caches.open(CACHE_NAME).then(cache => {
+			return cache.match(event.request).then(response => {
+				if (response) return response;
+				return fetch(event.request).then(networkResponse => {
+					return networkResponse;
+				});
+			});
+		})
+	);
+});
