@@ -335,7 +335,7 @@ const Popup = ({children, onClose, title, width}) => {
 					<div className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer"
 						onClick={onClose}
 					>
-						<i className="fa-solid fa-circle-xmark text-red-500 text-xl hover:text-red-700 transition"></i>
+						<i className="fa-solid fa-circle-xmark text-red-500 text-xl hover:text-red-700 active:text-red-700 transition"></i>
 					</div>
 				</h2>
 				{children}
