@@ -4,8 +4,8 @@ const App = () => {
 	const [ratesTime, setRatesTime] = React.useState(null)
 	const [ratesGraph, setRatesGraph] = React.useState({})
 	const [showAddPopup, setShowAddPopup] = React.useState(false)
+	const [showAddButton, setShowAddButton] = React.useState(true)
 	const [selectedCurrencies, setSelectedCurrencies] = React.useState([])
-
 	const [loadingApiData, setLoadingApiData] = React.useState(false)
 	
 	function loadRates() {
@@ -65,6 +65,21 @@ const App = () => {
 		}
 		setRatesGraph(graph)
 	}, [rates])
+	
+	React.useEffect(() => {
+		let lastScrollY = window.scrollY;
+
+		const handleScroll = () => {
+			if (window.scrollY > lastScrollY) {
+				setShowAddButton(false)
+			} else {
+				setShowAddButton(true)
+			}
+			lastScrollY = window.scrollY
+		}
+		window.addEventListener("scroll", handleScroll)
+		return () => window.removeEventListener("scroll", handleScroll)
+	}, [])
 
 	const addCurrency = (currency) => {
 		if (!selectedCurrencies.some(c => c.iso_code === currency.iso_code)) {
@@ -155,8 +170,11 @@ const App = () => {
 				</div>
 			</div>
 
-			<div className="fixed bottom-5 right-5 h-14 w-14 rounded-full shadow-lg text-xl flex items-center justify-center cursor-pointer
-				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10 transition"
+			<div className={`fixed right-5 h-14 w-14 rounded-full shadow-lg text-xl
+				flex items-center justify-center cursor-pointer
+				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10 transition-all duration-300
+				${showAddButton ? "bottom-5" : "-bottom-20"}
+			`}
 				onClick={() => setShowAddPopup(true)}
 			>
 				<i className="fa-solid fa-plus"></i>
