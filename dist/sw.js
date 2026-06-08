@@ -1,4 +1,4 @@
-const CACHE_NAME = "currency-converter-v4";
+const CACHE_NAME = "currency-converter-v5";
 
 const FILES = [
 	"./",
