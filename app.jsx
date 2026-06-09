@@ -133,11 +133,11 @@ const App = () => {
 	return (
 		<div className="dark:bg-zinc-900 dark:text-white min-h-dvh transition">
 			<div className="p-4 border-b border-zinc-200 dark:border-zinc-700 select-none">
-				<div className="flex items-center justify-between gap-3 w-lg max-w-full mx-auto"
+				<header className="flex items-center justify-between gap-3 w-lg max-w-full mx-auto"
 					inert={showAddPopup ? "" : undefined}
 				>
 					<div className="flex items-center gap-3">
-						<img className="h-9" src="icon.png" draggable={false} />
+						<img className="h-9" src="icon.png" draggable={false} alt="Icon"/>
 						<div className="flex flex-col">
 							<span className="font-bold uppercase text-lg">Currency Converter</span>
 							{ratesTime && (
@@ -183,7 +183,7 @@ const App = () => {
 							<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
 						</div>
 					)}
-				</div>
+				</header>
 			</div>
 
 			<div className={`fixed bottom-5 right-5 h-14 w-14 rounded-full shadow-lg text-xl
@@ -199,6 +199,7 @@ const App = () => {
 				inert={showAddPopup || !showAddButton ? "" : undefined}
 				tabIndex={0}
 				role="button"
+				aria-label="Add currency"
 				onClick={() => setShowAddPopup(true)}
 				onPointerDown={()=>navigator.vibrate(30)}
 				onKeyDown={(e) => {
@@ -223,7 +224,7 @@ const App = () => {
 			>
 				<ReactBeautifulDnd.Droppable droppableId="droppable">
 				{(provided, snapshot) => (
-					<div 
+					<main 
 						ref={provided.innerRef} 
 						className="p-4 flex flex-col gap-3 w-xl max-w-full mx-auto"
 						{...provided.droppableProps}
@@ -251,7 +252,7 @@ const App = () => {
 						</ReactBeautifulDnd.Draggable>
 					))}
 					{provided.placeholder}
-					</div>
+					</main>
 				)}
 				</ReactBeautifulDnd.Droppable>
 			</ReactBeautifulDnd.DragDropContext>
@@ -317,6 +318,7 @@ const CurrencyCard = ({
 			"
 				tabIndex={0}
 				role="button"
+				aria-label="Drag to reorder"
 				{...dragHandleProps}
 			>
 				<i className="fa-solid fa-grip-vertical"></i>
@@ -336,6 +338,7 @@ const CurrencyCard = ({
 				"
 					role="button"
 					tabIndex={0}
+					aria-label={`Remove ${currency.name}`}
 					onClick={onRemove}
 					onPointerDown={()=>navigator.vibrate(50)}
 					onKeyDown={(e) => {
