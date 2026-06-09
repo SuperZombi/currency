@@ -163,6 +163,7 @@ const App = () => {
 							`}
 						`}
 							onClick={() => {loadRates()}} disabled={loadingApiData}
+							onPointerDown={()=>navigator.vibrate(30)}
 						>
 							<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
 						</div>
@@ -176,6 +177,7 @@ const App = () => {
 				${showAddButton ? "bottom-5" : "-bottom-20"}
 			`}
 				onClick={() => setShowAddPopup(true)}
+				onPointerDown={()=>navigator.vibrate(30)}
 			>
 				<i className="fa-solid fa-plus"></i>
 			</div>
@@ -188,7 +190,11 @@ const App = () => {
 				/>
 			)}
 
-			<ReactBeautifulDnd.DragDropContext onDragEnd={onDragEnd}>
+			<ReactBeautifulDnd.DragDropContext
+				onDragEnd={onDragEnd}
+				onDragStart={()=>navigator.vibrate(50)}
+				onDragUpdate={()=>navigator.vibrate(25)}
+			>
 				<ReactBeautifulDnd.Droppable droppableId="droppable">
 				{(provided, snapshot) => (
 					<div 
@@ -291,7 +297,10 @@ const CurrencyCard = ({
 					text-red-500 active:scale-90
 					transition cursor-pointer
 					self-start
-				" onClick={onRemove}>
+				"
+					onClick={onRemove}
+					onPointerDown={()=>navigator.vibrate(50)}
+				>
 					<i className="fa-solid fa-xmark"></i>
 				</div>
 				<input className="no-spinner text-2xl font-mono outline-none w-full text-black dark:text-white"
