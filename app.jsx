@@ -172,6 +172,7 @@ const App = () => {
 						`}
 							role="button"
 							tabIndex={0}
+							title="Refresh rates"
 							aria-label="Refresh exchange rates"
 							onClick={() => { loadRates() }} disabled={loadingApiData}
 							onPointerDown={()=>navigator.vibrate(30)}
@@ -200,6 +201,7 @@ const App = () => {
 				inert={showAddPopup || !showAddButton ? "" : undefined}
 				tabIndex={0}
 				role="button"
+				title="Add currency"
 				aria-label="Add currency"
 				onClick={() => setShowAddPopup(true)}
 				onPointerDown={()=>navigator.vibrate(30)}
