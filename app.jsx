@@ -166,9 +166,19 @@ const App = () => {
 								hover:bg-zinc-200 active:bg-zinc-200
 								dark:hover:bg-zinc-700 dark:active:bg-zinc-700
 							`}
+							outline-none focus-visible:ring-2
+							focus-visible:ring-zinc-300/50
+							dark:focus-visible:ring-zinc-700/60
 						`}
-							onClick={() => {loadRates()}} disabled={loadingApiData}
+							role="button"
+							tabIndex={0}
+							onClick={() => { loadRates() }} disabled={loadingApiData}
 							onPointerDown={()=>navigator.vibrate(30)}
+							onKeyDown={(e) => {
+								if (e.keyCode == 13 && !loadingApiData){
+									loadRates()
+								}
+							}}
 						>
 							<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
 						</div>
