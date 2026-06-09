@@ -171,11 +171,14 @@ const App = () => {
 				</div>
 			</div>
 
-			<div className={`fixed right-5 h-14 w-14 rounded-full shadow-lg text-xl
+			<div className={`fixed bottom-5 right-5 h-14 w-14 rounded-full shadow-lg text-xl
 				flex items-center justify-center cursor-pointer active:scale-90
-				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10 transition-all
-				${showAddButton ? "bottom-5" : "-bottom-20"}
+				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10
+				${showAddButton ? "translate-y-0" : "translate-y-24"}
 			`}
+				style={{
+					transition: "translate 300ms ease, background-color 150ms ease, scale 150ms ease"
+				}}
 				onClick={() => setShowAddPopup(true)}
 				onPointerDown={()=>navigator.vibrate(30)}
 			>
