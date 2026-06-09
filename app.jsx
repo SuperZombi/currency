@@ -157,7 +157,7 @@ const App = () => {
 							border border-zinc-200 dark:border-zinc-700
 							bg-zinc-100 dark:bg-zinc-800
 							text-gray-700 dark:text-gray-100 transition
-							${loadingApiData ? '' : `cursor-pointer
+							${loadingApiData ? '' : `cursor-pointer active:scale-95
 								hover:bg-zinc-200 active:bg-zinc-200
 								dark:hover:bg-zinc-700 dark:active:bg-zinc-700
 							`}
@@ -308,7 +308,7 @@ const CurrencyCard = ({
 					onChange={handleChange}
 					onClick={setCurrentField}
 				/>
-				<span className="text-xl font-mono text-zinc-500 justify-self-center">{currency.symbol}</span>
+				<span className="text-xl font-mono text-zinc-500 justify-self-center select-none">{currency.symbol}</span>
 			</div>
 		</div>
 	)
@@ -382,6 +382,7 @@ const Popup = ({children, onClose, title, width}) => {
 					<div className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer
 						w-6 h-6 flex items-center justify-center rounded-full text-xs
 						text-white bg-red-500 hover:bg-red-700 active:bg-red-700 transition
+						active:scale-95
 					" onClick={onClose}
 						onPointerDown={()=>navigator.vibrate(30)}
 					>
