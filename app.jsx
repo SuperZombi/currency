@@ -287,7 +287,15 @@ const CurrencyCard = ({
 				hover:text-zinc-900 dark:hover:text-zinc-300
 				active:text-zinc-900 dark:active:text-zinc-300
 				!cursor-move touch-none transition
-			" {...dragHandleProps}>
+				outline-none rounded-2xl
+				focus-visible:ring-2 focus-visible:ring-zinc-400/50
+				focus-visible:-mr-2
+				focus-visible:text-zinc-900 dark:focus-visible:text-zinc-300
+			"
+				tabIndex={0}
+				role="button"
+				{...dragHandleProps}
+			>
 				<i className="fa-solid fa-grip-vertical"></i>
 			</div>
 			<div className="flex-1 grid grid-cols-[1fr_auto] gap-2 items-center">
@@ -300,9 +308,16 @@ const CurrencyCard = ({
 					bg-red-500/10 hover:bg-red-500/20 active:bg-red-500/20
 					text-red-500 active:scale-90
 					transition cursor-pointer
-					self-start
-				" onClick={onRemove}
+					self-start outline-none
+					focus-visible:ring-2 focus-visible:ring-red-500/50
+				"
+					role="button"
+					tabIndex={0}
+					onClick={onRemove}
 					onPointerDown={()=>navigator.vibrate(50)}
+					onKeyDown={(e) => {
+						if (e.keyCode == 13){onRemove()}
+					}}
 				>
 					<i className="fa-solid fa-xmark"></i>
 				</div>
