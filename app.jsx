@@ -68,7 +68,6 @@ const App = () => {
 	
 	React.useEffect(() => {
 		let lastScrollY = window.scrollY;
-
 		const handleScroll = () => {
 			if (window.scrollY > lastScrollY) {
 				setShowAddButton(false)
@@ -80,6 +79,10 @@ const App = () => {
 		window.addEventListener("scroll", handleScroll)
 		return () => window.removeEventListener("scroll", handleScroll)
 	}, [])
+	React.useEffect(() => {
+		document.body.style.overflow = showAddPopup ? "hidden" : ""
+		return () => {document.body.style.overflow = ""}
+	}, [showAddPopup])
 
 	const addCurrency = (currency) => {
 		if (!selectedCurrencies.some(c => c.iso_code === currency.iso_code)) {
@@ -130,7 +133,9 @@ const App = () => {
 	return (
 		<div className="dark:bg-zinc-900 dark:text-white min-h-dvh transition">
 			<div className="p-4 border-b border-zinc-200 dark:border-zinc-700 select-none">
-				<div className="flex items-center justify-between gap-3 w-lg max-w-full mx-auto">
+				<div className="flex items-center justify-between gap-3 w-lg max-w-full mx-auto"
+					inert={showAddPopup ? "" : undefined}
+				>
 					<div className="flex items-center gap-3">
 						<img className="h-9" src="icon.png" draggable={false} />
 						<div className="flex flex-col">
@@ -181,6 +186,7 @@ const App = () => {
 				style={{
 					transition: "translate 300ms ease, background-color 150ms ease, scale 150ms ease"
 				}}
+				inert={showAddPopup || !showAddButton ? "" : undefined}
 				tabIndex={0}
 				role="button"
 				onClick={() => setShowAddPopup(true)}
@@ -211,6 +217,7 @@ const App = () => {
 						ref={provided.innerRef} 
 						className="p-4 flex flex-col gap-3 w-xl max-w-full mx-auto"
 						{...provided.droppableProps}
+						inert={showAddPopup ? "" : undefined}
 					>
 					{selectedCurrencies.map((currency, index) => (
 						<ReactBeautifulDnd.Draggable
@@ -369,14 +376,24 @@ const AddCurrencyPopup = ({
 				/>
 			</div>
 			{filteredCurrencies.length > 0 && (
-				<div className="max-h-96 overflow-y-auto scrollbar-thin dark:scheme-dark">
+				<div className="max-h-96 overflow-y-auto scrollbar-thin dark:scheme-dark outline-none">
 					{filteredCurrencies.map((currency, index) => (
 						<div key={index} className="
 							grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3 cursor-pointer
-							hover:bg-zinc-200 active:bg-zinc-200 transition select-none
+							hover:bg-zinc-200 active:bg-zinc-200 transition select-none outline-none
 							dark:hover:bg-zinc-700 dark:active:bg-zinc-700
-						" onClick={() => {addCurrency(currency); onClose()}}
+							focus-visible:bg-zinc-200 dark:focus-visible:bg-zinc-700
+						"
+							role="button"
+							tabIndex={0}
+							onClick={() => {addCurrency(currency); onClose()}}
 							onPointerDown={()=>navigator.vibrate(30)}
+							onKeyDown={(e) => {
+								if (e.keyCode == 13){
+									addCurrency(currency)
+									onClose()
+								}
+							}}
 						>
 							<span className="justify-self-center font-mono font-semibold">{currency.iso_code}</span>
 							<span>{currency.name}</span>
@@ -394,8 +411,17 @@ const Popup = ({children, onClose, title, width}) => {
 			onClose()
 		}
 	}
+	React.useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.keyCode == 27) { onClose() }
+		}
+		document.addEventListener("keydown", handleKeyDown)
+		return () => { document.removeEventListener("keydown", handleKeyDown) }
+	}, [onClose])
 	return (
-		<div className="animate-[fadeIn_0.22s_ease_both] backdrop-blur-xs fixed z-20 inset-0 bg-black/50 flex items-center justify-center" onClick={handleClick}>
+		<div className="animate-[fadeIn_0.22s_ease_both] backdrop-blur-xs fixed z-20 inset-0 bg-black/50 flex items-center justify-center"
+			onClick={handleClick}
+		>
 			<div className={`
 				animate-[modalIn_0.22s_ease_both]
 				bg-white dark:bg-zinc-900 dark:text-white rounded-xl divide-y divide-zinc-200 dark:divide-zinc-700
@@ -407,9 +433,16 @@ const Popup = ({children, onClose, title, width}) => {
 					<div className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer
 						w-6 h-6 flex items-center justify-center rounded-full text-xs
 						text-white bg-red-500 hover:bg-red-700 active:bg-red-700 transition
-						active:scale-95
-					" onClick={onClose}
+						active:scale-95 outline-none
+						focus-visible:ring-3 focus-visible:ring-red-500/50
+					"
+						role="button"
+						tabIndex={0}
+						onClick={onClose}
 						onPointerDown={()=>navigator.vibrate(30)}
+						onKeyDown={(e) => {
+							if (e.keyCode == 13){onClose()}
+						}}
 					>
 						<i className="fa-solid fa-xmark"></i>
 					</div>
