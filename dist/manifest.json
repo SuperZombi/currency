@@ -1,17 +1,35 @@
 {
 	"name": "Currency Converter",
 	"short_name": "Currency",
-	"description": "Currency Converter",
+	"description": "Fast, lightweight offline currency converter with smooth drag-and-drop currency management.",
 	"start_url": "./",
 	"display": "standalone",
 	"background_color": "#1d202f",
 	"theme_color": "#1d202f",
 	"orientation": "portrait",
+	"lang": "en",
+	"categories": ["finance", "utilities", "productivity"],
 	"icons": [
 		{
 			"src": "icon.png",
 			"sizes": "512x512",
 			"type": "image/png"
+		}
+	],
+	"screenshots": [
+		{
+			"src": "screenshots/screenshot_light.png",
+			"sizes": "1080x1920",
+			"type": "image/png",
+			"form_factor": "narrow",
+			"label": "Light mode"
+		},
+		{
+			"src": "screenshots/screenshot_dark.png",
+			"sizes": "1080x1920",
+			"type": "image/png",
+			"form_factor": "narrow",
+			"label": "Dark mode"
 		}
 	]
 }
