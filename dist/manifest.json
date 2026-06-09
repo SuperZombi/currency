@@ -30,6 +30,13 @@
 			"type": "image/png",
 			"form_factor": "narrow",
 			"label": "Dark mode"
+		},
+		{
+			"src": "screenshots/screenshot_both.png",
+			"sizes": "1216x1080",
+			"type": "image/png",
+			"form_factor": "wide",
+			"label": "Light and Dark modes"
 		}
 	]
 }
