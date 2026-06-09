@@ -174,14 +174,20 @@ const App = () => {
 			<div className={`fixed bottom-5 right-5 h-14 w-14 rounded-full shadow-lg text-xl
 				flex items-center justify-center cursor-pointer active:scale-90
 				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10
-				print:hidden
+				print:hidden outline-none
+				focus-visible:ring-4 focus-visible:ring-sky-400/50
 				${showAddButton ? "translate-y-0" : "translate-y-24"}
 			`}
 				style={{
 					transition: "translate 300ms ease, background-color 150ms ease, scale 150ms ease"
 				}}
+				tabIndex={0}
+				role="button"
 				onClick={() => setShowAddPopup(true)}
 				onPointerDown={()=>navigator.vibrate(30)}
+				onKeyDown={(e) => {
+					if (e.keyCode == 13){setShowAddPopup(true)}
+				}}
 			>
 				<i className="fa-solid fa-plus"></i>
 			</div>
