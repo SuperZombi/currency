@@ -171,8 +171,8 @@ const App = () => {
 			</div>
 
 			<div className={`fixed right-5 h-14 w-14 rounded-full shadow-lg text-xl
-				flex items-center justify-center cursor-pointer active:scale-95
-				bg-sky-500 text-white hover:bg-sky-700 active:bg-sky-700 z-10 transition-all duration-300
+				flex items-center justify-center cursor-pointer active:scale-90
+				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10 transition-all
 				${showAddButton ? "bottom-5" : "-bottom-20"}
 			`}
 				onClick={() => setShowAddPopup(true)}
@@ -193,7 +193,7 @@ const App = () => {
 				{(provided, snapshot) => (
 					<div 
 						ref={provided.innerRef} 
-						className="p-4 flex flex-col gap-2 w-xl max-w-full mx-auto"
+						className="p-4 flex flex-col gap-3 w-xl max-w-full mx-auto"
 						{...provided.droppableProps}
 					>
 					{selectedCurrencies.map((currency, index) => (
@@ -264,7 +264,7 @@ const CurrencyCard = ({
 		<div ref={innerRef}
 			className={`
 				animate-[modalIn_0.5s_ease_backwards]
-				flex flex-col gap-3 transition-colors
+				flex items-center gap-4 transition-colors
 				border border-zinc-200 dark:border-zinc-700
 				rounded-2xl p-4 shadow-sm
 				bg-white/25 dark:bg-zinc-900/25
@@ -273,45 +273,34 @@ const CurrencyCard = ({
 			`}
 			{...draggableProps}
 		>
-			<div className="flex justify-between gap-2">
+			<div className="text-zinc-500 self-stretch flex items-center p-4 -m-4
+				hover:text-zinc-900 dark:hover:text-zinc-300
+				active:text-zinc-900 dark:active:text-zinc-300
+				!cursor-move touch-none transition
+			" {...dragHandleProps}>
+				<i className="fa-solid fa-grip-vertical"></i>
+			</div>
+			<div className="flex-1 grid grid-cols-[1fr_auto] gap-2 items-center">
 				<div className="flex flex-col select-none whitespace-nowrap">
 					<span className="text-lg font-bold">{currency.iso_code}</span>
 					<div className="text-sm text-zinc-500">{currency.name}</div>
 				</div>
-				<div className="flex items-center gap-2">
-					<div className="h-9 w-9 rounded-xl
-						flex items-center justify-center
-						bg-zinc-100 hover:bg-zinc-200 active:bg-zinc-200
-						dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:active:bg-zinc-700
-						text-gray-500 hover:text-gray-800 active:text-gray-800
-						dark:hover:text-gray-300 dark:active:text-gray-300
-						active:scale-90 transition !cursor-move touch-none
-					"
-						{...dragHandleProps}
-					>
-						<i className="fa-solid fa-bars"></i>
-					</div>
-					<div className="h-9 w-9 rounded-xl
-						flex items-center justify-center
-						bg-red-500/10 hover:bg-red-500/20 active:bg-red-500/20
-						text-red-500 active:scale-90
-						transition cursor-pointer
-					"
-						onClick={onRemove}
-					>
-						<i className="fa-solid fa-xmark"></i>
-					</div>
+				<div className="h-9 w-9 rounded-xl
+					flex items-center justify-center
+					bg-red-500/10 hover:bg-red-500/20 active:bg-red-500/20
+					text-red-500 active:scale-90
+					transition cursor-pointer
+					self-start
+				" onClick={onRemove}>
+					<i className="fa-solid fa-xmark"></i>
 				</div>
-			</div>
-			
-			<div className="w-full flex items-center justify-between gap-3">
 				<input className="no-spinner text-2xl font-mono outline-none w-full text-black dark:text-white"
 					type="number" inputMode="decimal" min="0" placeholder="0"
 					value={localVal || ""}
 					onChange={handleChange}
 					onClick={setCurrentField}
 				/>
-				<span className="text-xl font-mono text-zinc-500">{currency.symbol}</span>
+				<span className="text-xl font-mono text-zinc-500 justify-self-center">{currency.symbol}</span>
 			</div>
 		</div>
 	)
