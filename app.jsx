@@ -174,6 +174,7 @@ const App = () => {
 			<div className={`fixed bottom-5 right-5 h-14 w-14 rounded-full shadow-lg text-xl
 				flex items-center justify-center cursor-pointer active:scale-90
 				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10
+				print:hidden
 				${showAddButton ? "translate-y-0" : "translate-y-24"}
 			`}
 				style={{
@@ -275,9 +276,9 @@ const CurrencyCard = ({
 				animate-[modalIn_0.5s_ease_backwards]
 				flex items-center gap-4 transition-colors
 				border border-zinc-200 dark:border-zinc-700
-				rounded-2xl p-4 shadow-sm
+				rounded-2xl p-4 shadow-sm print:shadow-none
 				bg-white/25 dark:bg-zinc-900/25
-				backdrop-blur-sm
+				backdrop-blur-sm print:break-inside-avoid
 				${isDragging ? 'scale-95' : ''}
 			`}
 			{...draggableProps}
