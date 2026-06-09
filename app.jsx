@@ -172,6 +172,7 @@ const App = () => {
 						`}
 							role="button"
 							tabIndex={0}
+							aria-label="Refresh exchange rates"
 							onClick={() => { loadRates() }} disabled={loadingApiData}
 							onPointerDown={()=>navigator.vibrate(30)}
 							onKeyDown={(e) => {
