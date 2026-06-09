@@ -18,25 +18,28 @@
 	],
 	"screenshots": [
 		{
-			"src": "screenshots/screenshot_light.png",
+			"src": "screenshots/screenshot_mobile_light.png",
 			"sizes": "1080x1920",
 			"type": "image/png",
-			"form_factor": "narrow",
-			"label": "Light mode"
+			"form_factor": "narrow"
 		},
 		{
-			"src": "screenshots/screenshot_dark.png",
+			"src": "screenshots/screenshot_mobile_dark.png",
 			"sizes": "1080x1920",
 			"type": "image/png",
-			"form_factor": "narrow",
-			"label": "Dark mode"
+			"form_factor": "narrow"
 		},
 		{
-			"src": "screenshots/screenshot_both.png",
-			"sizes": "1216x1080",
+			"src": "screenshots/screenshot_desktop_light.png",
+			"sizes": "1080x868",
 			"type": "image/png",
-			"form_factor": "wide",
-			"label": "Light and Dark modes"
+			"form_factor": "wide"
+		},
+		{
+			"src": "screenshots/screenshot_desktop_dark.png",
+			"sizes": "1080x868",
+			"type": "image/png",
+			"form_factor": "wide"
 		}
 	]
 }
