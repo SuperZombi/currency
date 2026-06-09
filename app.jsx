@@ -171,8 +171,8 @@ const App = () => {
 			</div>
 
 			<div className={`fixed right-5 h-14 w-14 rounded-full shadow-lg text-xl
-				flex items-center justify-center cursor-pointer
-				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10 transition-all duration-300
+				flex items-center justify-center cursor-pointer active:scale-95
+				bg-sky-500 text-white hover:bg-sky-700 active:bg-sky-700 z-10 transition-all duration-300
 				${showAddButton ? "bottom-5" : "-bottom-20"}
 			`}
 				onClick={() => setShowAddPopup(true)}
