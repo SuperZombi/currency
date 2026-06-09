@@ -297,8 +297,7 @@ const CurrencyCard = ({
 					text-red-500 active:scale-90
 					transition cursor-pointer
 					self-start
-				"
-					onClick={onRemove}
+				" onClick={onRemove}
 					onPointerDown={()=>navigator.vibrate(50)}
 				>
 					<i className="fa-solid fa-xmark"></i>
@@ -349,9 +348,11 @@ const AddCurrencyPopup = ({
 					{filteredCurrencies.map((currency, index) => (
 						<div key={index} className="
 							grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3 cursor-pointer
-							hover:bg-zinc-200 transition select-none
-							dark:hover:bg-zinc-700
-						" onClick={() => {addCurrency(currency); onClose()}}>
+							hover:bg-zinc-200 active:bg-zinc-200 transition select-none
+							dark:hover:bg-zinc-700 dark:active:bg-zinc-700
+						" onClick={() => {addCurrency(currency); onClose()}}
+							onPointerDown={()=>navigator.vibrate(30)}
+						>
 							<span className="justify-self-center font-mono font-semibold">{currency.iso_code}</span>
 							<span>{currency.name}</span>
 						</div>
@@ -381,8 +382,8 @@ const Popup = ({children, onClose, title, width}) => {
 					<div className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer
 						w-6 h-6 flex items-center justify-center rounded-full text-xs
 						text-white bg-red-500 hover:bg-red-700 active:bg-red-700 transition
-					"
-						onClick={onClose}
+					" onClick={onClose}
+						onPointerDown={()=>navigator.vibrate(30)}
 					>
 						<i className="fa-solid fa-xmark"></i>
 					</div>
