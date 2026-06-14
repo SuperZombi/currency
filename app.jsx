@@ -191,12 +191,12 @@ const App = () => {
 				bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-600 z-10
 				print:hidden outline-none
 				focus-visible:ring-4 focus-visible:ring-sky-400/50
-				${showAddButton ? "translate-y-0" : "translate-y-24"}
+				${showAddButton && currencies.length > 0 ? "translate-y-0" : "translate-y-24"}
 			`}
 				style={{
 					transition: "translate 300ms ease, background-color 150ms ease, scale 150ms ease"
 				}}
-				inert={showAddPopup || !showAddButton ? "" : undefined}
+				inert={showAddPopup || !(showAddButton && currencies.length > 0) ? "" : undefined}
 				tabIndex={0}
 				role="button"
 				title="Add currency"
