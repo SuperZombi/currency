@@ -156,35 +156,33 @@ const App = () => {
 							)}
 						</div>
 					</div>
-					{ratesTime && (
-						<div className={`h-7 w-7 rounded-lg text-xs
-							flex items-center justify-center
-							border border-zinc-200 dark:border-zinc-700
-							bg-zinc-100 dark:bg-zinc-800
-							text-gray-700 dark:text-gray-100 transition
-							${loadingApiData ? '' : `cursor-pointer active:scale-95
-								hover:bg-zinc-200 active:bg-zinc-200
-								dark:hover:bg-zinc-700 dark:active:bg-zinc-700
-							`}
-							outline-none focus-visible:ring-2
-							focus-visible:ring-zinc-300/50
-							dark:focus-visible:ring-zinc-700/60
+					<div className={`h-7 w-7 rounded-lg text-xs
+						flex items-center justify-center
+						border border-zinc-200 dark:border-zinc-700
+						bg-zinc-100 dark:bg-zinc-800
+						text-gray-700 dark:text-gray-100 transition
+						${loadingApiData ? '' : `cursor-pointer active:scale-95
+							hover:bg-zinc-200 active:bg-zinc-200
+							dark:hover:bg-zinc-700 dark:active:bg-zinc-700
 						`}
-							role="button"
-							tabIndex={0}
-							title="Refresh rates"
-							aria-label="Refresh exchange rates"
-							onClick={() => { loadRates() }} disabled={loadingApiData}
-							onPointerDown={()=>navigator.vibrate(30)}
-							onKeyDown={(e) => {
-								if (e.keyCode == 13 && !loadingApiData){
-									loadRates()
-								}
-							}}
-						>
-							<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
-						</div>
-					)}
+						outline-none focus-visible:ring-2
+						focus-visible:ring-zinc-300/50
+						dark:focus-visible:ring-zinc-700/60
+					`}
+						role="button"
+						tabIndex={0}
+						title="Refresh rates"
+						aria-label="Refresh exchange rates"
+						onClick={() => { loadRates() }} disabled={loadingApiData}
+						onPointerDown={()=>navigator.vibrate(30)}
+						onKeyDown={(e) => {
+							if (e.keyCode == 13 && !loadingApiData){
+								loadRates()
+							}
+						}}
+					>
+						<i className={`fa-solid fa-arrows-rotate ${loadingApiData ? 'fa-spin' : ''}`}></i>
+					</div>
 				</header>
 			</div>
 
