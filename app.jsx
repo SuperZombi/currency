@@ -218,46 +218,51 @@ const App = () => {
 				/>
 			)}
 
-			<ReactBeautifulDnd.DragDropContext
-				onDragEnd={onDragEnd}
-				onDragStart={()=>navigator.vibrate(50)}
-				onDragUpdate={()=>navigator.vibrate(25)}
-			>
-				<ReactBeautifulDnd.Droppable droppableId="droppable">
-				{(provided, snapshot) => (
-					<main 
-						ref={provided.innerRef} 
-						className="p-4 flex flex-col gap-3 w-xl max-w-full mx-auto"
-						{...provided.droppableProps}
-						inert={showAddPopup ? "" : undefined}
-					>
-					{selectedCurrencies.map((currency, index) => (
-						<ReactBeautifulDnd.Draggable
-							key={currency.iso_code}
-							draggableId={currency.iso_code}
-							index={index}
+			{currencies.length > 0 ? (
+				<ReactBeautifulDnd.DragDropContext
+					onDragEnd={onDragEnd}
+					onDragStart={()=>navigator.vibrate(50)}
+					onDragUpdate={()=>navigator.vibrate(25)}
+				>
+					<ReactBeautifulDnd.Droppable droppableId="droppable">
+					{(provided, snapshot) => (
+						<main 
+							ref={provided.innerRef} 
+							className="p-4 flex flex-col gap-3 w-xl max-w-full mx-auto"
+							{...provided.droppableProps}
+							inert={showAddPopup ? "" : undefined}
 						>
-						{(provided, snapshot) => (
-							<CurrencyCard
-								innerRef={provided.innerRef}
-								draggableProps={provided.draggableProps}
-								dragHandleProps={provided.dragHandleProps}
-								isDragging={snapshot.isDragging}
-								currency={currency}
-								currentCurrency={currentCurrencyFrom}
-								value={convertCurrency(currentAmount, currentCurrencyFrom, currency.iso_code)}
-								onAmountChange={handleAmountChange}
-								onRemove={() => setSelectedCurrencies(prev => prev.filter(c => c.iso_code !== currency.iso_code))}
-							/>
-						)}
-						</ReactBeautifulDnd.Draggable>
-					))}
-					{provided.placeholder}
-					</main>
-				)}
-				</ReactBeautifulDnd.Droppable>
-			</ReactBeautifulDnd.DragDropContext>
-
+						{selectedCurrencies.map((currency, index) => (
+							<ReactBeautifulDnd.Draggable
+								key={currency.iso_code}
+								draggableId={currency.iso_code}
+								index={index}
+							>
+							{(provided, snapshot) => (
+								<CurrencyCard
+									innerRef={provided.innerRef}
+									draggableProps={provided.draggableProps}
+									dragHandleProps={provided.dragHandleProps}
+									isDragging={snapshot.isDragging}
+									currency={currency}
+									currentCurrency={currentCurrencyFrom}
+									value={convertCurrency(currentAmount, currentCurrencyFrom, currency.iso_code)}
+									onAmountChange={handleAmountChange}
+									onRemove={() => setSelectedCurrencies(prev => prev.filter(c => c.iso_code !== currency.iso_code))}
+								/>
+							)}
+							</ReactBeautifulDnd.Draggable>
+						))}
+						{provided.placeholder}
+						</main>
+					)}
+					</ReactBeautifulDnd.Droppable>
+				</ReactBeautifulDnd.DragDropContext>
+			) : (
+				<div className="text-center p-5">
+					<i className="fa-solid fa-spinner fa-spin text-3xl"></i>
+				</div>
+			)}
 		</div>
 	)
 }
