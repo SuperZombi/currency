@@ -33,11 +33,16 @@ const App = () => {
 		}
 
 		const savedRates = localStorage.getItem('rates')
-		const savedRatesTime = localStorage.getItem('ratesTime')
-		const now = Date.now()
-		if (savedRates && savedRatesTime && now - JSON.parse(savedRatesTime) < 12 * 60 * 60 * 1000) {
+		if (savedRates){
 			setRates(JSON.parse(savedRates))
-			setRatesTime(JSON.parse(savedRatesTime))
+
+			const savedRatesTime = localStorage.getItem('ratesTime')
+			const now = Date.now()
+			if (savedRatesTime && now - JSON.parse(savedRatesTime) < 12 * 60 * 60 * 1000) {
+				setRatesTime(JSON.parse(savedRatesTime))
+			} else {
+				loadRates()
+			}
 		} else {
 			loadRates()
 		}
@@ -218,7 +223,7 @@ const App = () => {
 				/>
 			)}
 
-			{currencies.length > 0 ? (
+			{(currencies.length > 0) && (rates.length > 0) ? (
 				<ReactBeautifulDnd.DragDropContext
 					onDragEnd={onDragEnd}
 					onDragStart={()=>navigator.vibrate(50)}
