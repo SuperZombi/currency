@@ -395,38 +395,40 @@ const AddCurrencyPopup = ({
 
 	return (
 		<Popup title="Add Currency" width="w-lg" onClose={onClose}>
-			<div className="grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3">
-				<i className="fa-solid fa-magnifying-glass justify-self-center"></i>
-				<input className="outline-none text-black dark:text-white" type="search" placeholder="Code or name..."
-					value={query} onChange={e => setQuery(e.target.value)}
-				/>
-			</div>
-			{filteredCurrencies.length > 0 && (
-				<div className="max-h-96 overflow-y-auto scrollbar-thin dark:scheme-dark outline-none">
-					{filteredCurrencies.map((currency, index) => (
-						<div key={index} className="
-							grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3 cursor-pointer
-							hover:bg-zinc-200 active:bg-zinc-200 transition select-none outline-none
-							dark:hover:bg-zinc-700 dark:active:bg-zinc-700
-							focus-visible:bg-zinc-200 dark:focus-visible:bg-zinc-700
-						"
-							role="button"
-							tabIndex={0}
-							onClick={() => {addCurrency(currency); onClose()}}
-							onPointerDown={()=>navigator.vibrate(30)}
-							onKeyDown={(e) => {
-								if (e.keyCode == 13){
-									addCurrency(currency)
-									onClose()
-								}
-							}}
-						>
-							<span className="justify-self-center font-mono font-semibold">{currency.iso_code}</span>
-							<span>{currency.name}</span>
-						</div>
-					))}
+			{({ close }) => (<React.Fragment>
+				<div className="grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3">
+					<i className="fa-solid fa-magnifying-glass justify-self-center"></i>
+					<input className="outline-none text-black dark:text-white" type="search" placeholder="Code or name..."
+						value={query} onChange={e => setQuery(e.target.value)}
+					/>
 				</div>
-			)}
+				{filteredCurrencies.length > 0 && (
+					<div className="max-h-96 overflow-y-auto scrollbar-thin dark:scheme-dark outline-none">
+						{filteredCurrencies.map((currency, index) => (
+							<div key={index} className="
+								grid grid-cols-[theme(spacing.9)_1fr] items-center gap-3 p-3 cursor-pointer
+								hover:bg-zinc-200 active:bg-zinc-200 transition select-none outline-none
+								dark:hover:bg-zinc-700 dark:active:bg-zinc-700
+								focus-visible:bg-zinc-200 dark:focus-visible:bg-zinc-700
+							"
+								role="button"
+								tabIndex={0}
+								onClick={() => {addCurrency(currency); close()}}
+								onPointerDown={()=>navigator.vibrate(30)}
+								onKeyDown={(e) => {
+									if (e.keyCode == 13){
+										addCurrency(currency)
+										close()
+									}
+								}}
+							>
+								<span className="justify-self-center font-mono font-semibold">{currency.iso_code}</span>
+								<span>{currency.name}</span>
+							</div>
+						))}
+					</div>
+				)}
+			</React.Fragment>)}
 		</Popup>
 	)
 }
@@ -479,16 +481,16 @@ const Popup = ({children, onClose, title, width}) => {
 					"
 						role="button"
 						tabIndex={0}
-						onClick={onClose}
+						onClick={beforeClose}
 						onPointerDown={()=>navigator.vibrate(30)}
 						onKeyDown={(e) => {
-							if (e.keyCode == 13){onClose()}
+							if (e.keyCode == 13){beforeClose()}
 						}}
 					>
 						<i className="fa-solid fa-xmark"></i>
 					</div>
 				</h2>
-				{children}
+				{typeof children === "function" ? children({ close: beforeClose }) : children}
 			</div>
 		</div>
 	)
