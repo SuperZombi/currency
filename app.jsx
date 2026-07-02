@@ -142,7 +142,9 @@ const App = () => {
 					inert={showAddPopup ? "" : undefined}
 				>
 					<div className="flex items-center gap-3">
-						<img className="h-9" src="icon.png" draggable={false} alt="Icon"/>
+						<img className={`h-9 ${
+							loadingApiData ? "animate-[loading_1s_linear_infinite]" : ""
+						}`} src="icon.png" draggable={false} alt="Icon"/>
 						<div className="flex flex-col">
 							<span className="font-bold uppercase text-lg">Currency Converter</span>
 							{ratesTime && (
@@ -308,7 +310,7 @@ const CurrencyCard = ({
 	return (
 		<div ref={innerRef}
 			className={`
-				animate-[modalIn_0.5s_ease_backwards]
+				animate-[cardIn_0.5s_ease_backwards]
 				flex items-center gap-4 transition-colors
 				border border-zinc-200 dark:border-zinc-700
 				rounded-2xl p-4 shadow-sm print:shadow-none
@@ -430,24 +432,39 @@ const AddCurrencyPopup = ({
 }
 
 const Popup = ({children, onClose, title, width}) => {
+	const [isVisible, setIsVisible] = React.useState(false)
+	React.useEffect(() => {
+		setIsVisible(true)
+	}, [])
+	const beforeClose = () => {
+		setIsVisible(false)
+		setTimeout(() => {
+			onClose()
+		}, 200)
+	}
 	const handleClick = (e) => {
 		if (e.target === e.currentTarget) {
-			onClose()
+			beforeClose()
 		}
 	}
 	React.useEffect(() => {
 		const handleKeyDown = (e) => {
-			if (e.keyCode == 27) { onClose() }
+			if (e.keyCode == 27) { beforeClose() }
 		}
 		document.addEventListener("keydown", handleKeyDown)
 		return () => { document.removeEventListener("keydown", handleKeyDown) }
 	}, [onClose])
 	return (
-		<div className="animate-[fadeIn_0.22s_ease_both] backdrop-blur-xs fixed z-20 inset-0 bg-black/50 flex items-center justify-center"
+		<div className={`
+			${isVisible ? 'bg-black/50 backdrop-blur-xs' : 'bg-black/0'}
+			transition duration-200 ease-out
+			fixed z-20 inset-0 flex items-center justify-center
+		`}
 			onClick={handleClick}
 		>
 			<div className={`
-				animate-[modalIn_0.22s_ease_both]
+				${isVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-98 translate-y-4'}
+				transition duration-200 ease-out will-change-transform
 				bg-white dark:bg-zinc-900 dark:text-white rounded-xl divide-y divide-zinc-200 dark:divide-zinc-700
 				border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden
 				${width} max-w-[calc(100%-theme(spacing.4))]

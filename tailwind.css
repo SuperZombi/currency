@@ -7,7 +7,7 @@
 	appearance: none;
 	margin: 0;
 }
-@keyframes modalIn {
+@keyframes cardIn {
 	0% {
 		opacity: 0;
 		transform: translateY(20px) scale(0.985);
@@ -17,11 +17,11 @@
 		transform: translateY(0) scale(1);
 	}
 }
-@keyframes fadeIn {
+@keyframes loading{
 	0% {
-		opacity: 0;
+		transform: rotateY(0deg);
 	}
 	100% {
-		opacity: 1;
+		transform: rotateY(360deg);
 	}
 }
